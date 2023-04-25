@@ -17,10 +17,7 @@ const Login = () => {
   // form submission behavior, which would cause a page reload and disrupt the
   // user experience. Instead, we can call getLogin directly to perform the
   // authentication process without causing any disruption to the user.
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    getLogin();
-  };
+  
 
   const getLogin = async () => {
     // Make a request to the server to authenticate the user
@@ -38,14 +35,19 @@ const Login = () => {
       console.error("Error during login:", error);
     }
   };
-
-  if (redirectToDashboard) {
-    return <Navigate to="/dashboard" />;
-  }
   // Handler for input changes in the login form
   const handleChange = (e) => {
     setLogin({ ...Login, [e.target.name]: e.target.value });
   };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    getLogin();
+  };
+  
+  if (redirectToDashboard) {
+    return <Navigate to="/dashboard" />;
+  }
   // Render the login form
   return (
     <div className="login-formParent">
