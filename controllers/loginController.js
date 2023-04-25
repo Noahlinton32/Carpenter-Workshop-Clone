@@ -4,9 +4,17 @@ const checkCredentials = async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await Staff.findOne({ username });
-
     if (user && user.password === password) {
-      res.json({ success: true, message: "Login successful" });
+      const isAdmin = user.isAdmin;
+      console.log("isAdmin value:", isAdmin);
+      res.json({
+        success: true,
+        message: "Login successful",
+        user: {
+          username: user.username,
+          isAdmin: user.isAdmin,
+        },
+      });
     } else {
       res.json({ success: false, message: "Login failed" });
     }

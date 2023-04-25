@@ -14,7 +14,8 @@ import CreateAccidents from './pages/CreateAccident';
 import Referrals from './pages/referrals';
 import CreateReferrals from './pages/CreateReferral';
 import Profile from './pages/profile';
-import { AuthProvider,useAuth } from './authContext';
+import AdminProfile from './pages/Admin';
+import { AuthProvider,useAuth} from './authContext';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 function App() {
 return (
@@ -90,12 +91,30 @@ return (
         <Profile/>
         </RequireAuth>
         } />
+        <Route path="/admin"
+        element={
+        <RequireAdmin>
+          <AdminProfile />
+        </RequireAdmin>
+        }
+          />
       </Routes>
     </Router>
     </AuthProvider>
+    
     </>
 )}
 // RequireAuth component to protect routes that require authentication
+function RequireAdmin({ children }) {
+  const auth = useAuth();
+  const location = useLocation();
+
+  if (!auth.user || !auth.user.isAdmin) {
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
+
+  return children;
+}
 function RequireAuth({ children }) {
   const auth = useAuth();
   const location = useLocation();

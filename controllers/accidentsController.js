@@ -11,7 +11,6 @@ const getAllAccidents = async (req, res)=> {
 const getOneAccident = async (req, res) => {
     //Get id from URL
     const reportID = req.params.id;
-
     //Find accident by ID (Report Num)
     const accident = await Accident.findOne({accidentReportNumber: reportID});
     //respond with accident

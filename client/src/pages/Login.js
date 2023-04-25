@@ -1,12 +1,13 @@
 import logo from "../components/Navbar/images/CSLogo.png";
 import axios from "axios";
-import { useContext } from "react";
+import { useContext,  } from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../authContext";
+import { AuthContext, useAuth } from "../authContext";
 import { useState } from "react";
 const Login = () => {
   // Get the login function from the authentication context
   const { login: loginUser } = useContext(AuthContext);
+  const auth = useAuth();
   // State to store the login form data
   const [Login, setLogin] = useState({ username: "", password: "" });
   // State to control whether the user should be redirected to the dashboard
@@ -26,6 +27,7 @@ const Login = () => {
         username: Login.username,
         password: Login.password,
       });
+      console.log("Response from server:", res.data);
       if (res.data.success) {
         loginUser(res.data);
         setRedirectToDashboard(true);
@@ -46,7 +48,7 @@ const Login = () => {
   };
   
   if (redirectToDashboard) {
-    return <Navigate to="/dashboard" />;
+    return <Navigate to={auth.user.isAdmin ? "/admin" : "/dashboard"} />;
   }
   // Render the login form
   return (

@@ -12,8 +12,11 @@ const AuthProvider = ({ children }) => {
   }, [user]);
   // Login function to set the user state
   const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+    setUser({
+      ...userData,
+      isAdmin: userData.user.isAdmin,
+    });
+    localStorage.setItem("user", JSON.stringify(userData.user));
   };
   // Logout function to clear the user state
   const logout = () => {
