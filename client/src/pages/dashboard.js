@@ -16,7 +16,7 @@ const GlobalStyle = createGlobalStyle`
     color: 555;
   }
 `
-const Home = () => {
+const Dashboard = () => {
   return (
     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '90vh'}}>
         <GlobalStyle/>

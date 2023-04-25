@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <>
     <Nav>
-    <NavLink to="/">
+    <NavLink to="/dashboard">
             Home
         </NavLink>
         <Bars />
@@ -22,7 +22,7 @@ const Navbar = () => {
             <NavLink to="/profile" activeStyle>Profile</NavLink>
         </NavMenu>
         <NavBtn>
-            <NavBtnLink to="/logout">Log Out</NavBtnLink>
+            <NavBtnLink to="/">Log Out</NavBtnLink>
         </NavBtn>
     </Nav>
     </>
