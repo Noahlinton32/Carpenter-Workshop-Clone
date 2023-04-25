@@ -1,11 +1,10 @@
 
 function Profile(){
-  
+
   return(
 <div>
   <meta charSet="utf-8" />
   <title>profile</title>
-
   <div className="ProfileParent">
   <div className="profileButtonParent">
   <button className="profileButton" >Reset Password</button> <br />  <br />

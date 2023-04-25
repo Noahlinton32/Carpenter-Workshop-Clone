@@ -23,10 +23,12 @@ return (
     <Router>
       <Navbar/>
       <Routes>
+        {/* Wrap the entire app with the AuthProvider to make the authentication state available to all components */}
         <Route exact path="/" 
         element={
         <Login/>
         } />
+        {/* Other routes are wrapped with RequireAuth to protect them */}
          <Route path="/dashboard" 
         element={
           <RequireAuth>
@@ -93,18 +95,18 @@ return (
     </AuthProvider>
     </>
 )}
+// RequireAuth component to protect routes that require authentication
 function RequireAuth({ children }) {
   const auth = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  console.log("RequireAuth - auth.user:", auth.user);
   useEffect(() => {
+      // If the user is not authenticated, redirect them to the login page
     if (!auth.user) {
-      console.log("not authed");
       navigate("/", { state: { from: location } });
     }
   }, [auth.user, navigate, location]);
-
+  // If the user is authenticated, render the protected route
   return children;
 }
 export default App;

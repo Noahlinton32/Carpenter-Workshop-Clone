@@ -5,28 +5,34 @@ import { Navigate } from "react-router-dom";
 import { AuthContext } from "../authContext";
 import { useState } from "react";
 const Login = () => {
+  // Get the login function from the authentication context
   const { login: loginUser } = useContext(AuthContext);
+  // State to store the login form data
   const [Login, setLogin] = useState({ username: "", password: "" });
+  // State to control whether the user should be redirected to the dashboard
   const [redirectToDashboard, setRedirectToDashboard] = useState(false);
-
+  // The handleSubmit function is necessary because it acts as a wrapper around
+  // the getLogin function, which makes the API call to authenticate the user.
+  // By calling handleSubmit on form submission, we can prevent the default
+  // form submission behavior, which would cause a page reload and disrupt the
+  // user experience. Instead, we can call getLogin directly to perform the
+  // authentication process without causing any disruption to the user.
   const handleSubmit = (e) => {
     e.preventDefault();
     getLogin();
   };
 
   const getLogin = async () => {
+    // Make a request to the server to authenticate the user
     try {
       const res = await axios.post("http://localhost:3000/login", {
         username: Login.username,
         password: Login.password,
       });
-
       if (res.data.success) {
-        console.log("Login successful:", res.data.message);
         loginUser(res.data);
         setRedirectToDashboard(true);
       } else {
-        console.log("Login failed:", res.data.message);
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -36,11 +42,11 @@ const Login = () => {
   if (redirectToDashboard) {
     return <Navigate to="/dashboard" />;
   }
-
+  // Handler for input changes in the login form
   const handleChange = (e) => {
     setLogin({ ...Login, [e.target.name]: e.target.value });
   };
-
+  // Render the login form
   return (
     <div className="login-formParent">
       <div className="login-page">
