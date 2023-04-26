@@ -12,14 +12,21 @@ const createStaff = async (req, res) => {
   res.json({ staff: staff });
 };
 
+const changeStaffPassword = async (req, res) => {
+  const staffId = req.params.employeeID;
+  const newPassword = req.body.password;
+  const staff = await Staff.findByIdAndUpdate(staffId, { password: newPassword }, { new: true });
+  res.json({ staff: staff });
+};
+
 const updateStaff = async (req, res) => {
-  const staffId = req.params.id;
+  const staffId = req.params.employeeID;
   const staff = await Staff.findByIdAndUpdate(staffId, req.body, { new: true });
   res.json({ staff: staff });
 };
 
 const archiveStaff = async (req, res) => {
-  const staffId = req.params.id;
+  const staffId = req.params.employeeID;
   const staff = await Staff.findById(staffId);
 
   staff.isActive = !staff.isActive;
@@ -40,7 +47,7 @@ const createStudent = async (req, res) => {
 };
 
 const updateStudent = async (req, res) => {
-  const studentId = req.params.id;
+  const studentId = req.params.studentID;
   const student = await Student.findByIdAndUpdate(studentId, req.body, {
     new: true,
   });
@@ -49,7 +56,7 @@ const updateStudent = async (req, res) => {
 
 
 const archiveStudent = async (req, res) => {
-    const studentId = req.params.id;
+    const studentId = req.params.studentID;
     const student = await Student.findById(studentId);
   
     student.isActive = !student.isActive;
@@ -67,4 +74,5 @@ module.exports = {
   createStudent: createStudent,
   updateStudent: updateStudent,
   archiveStudent: archiveStudent,
+  changeStaffPassword: changeStaffPassword,
 };

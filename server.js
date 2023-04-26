@@ -21,7 +21,9 @@ dbconnection();
 
 //Configure express app
 app.use(express.json()); 
-app.use(cors()); 
+app.use(cors({
+    origin: 'http://localhost:3001', // Replace this with your frontend domain
+  }));
 
 //Routes
 
@@ -29,14 +31,15 @@ app.use(cors());
 // Staff Admin Controller 
 app.get('/admin/staff', adminController.getAllStaff);
 app.post('/admin/staff', adminController.createStaff);
-app.put('/admin/staff/:id', adminController.updateStaff);
-app.delete('/admin/staff/:id', adminController.archiveStaff);
+app.put('/admin/staff/:employeeID', adminController.updateStaff);
+app.delete('/admin/staff/:employeeID', adminController.archiveStaff);
+app.put('/admin/staff/:employeeID/password', adminController.changeStaffPassword);
 
 // Student Admin Controller
 app.get('/admin/students', adminController.getAllStudents);
 app.post('/admin/students', adminController.createStudent);
-app.put('/admin/students/:id', adminController.updateStudent);
-app.delete('/admin/students/:id', adminController.archiveStudent);
+app.put('/admin/students/:employeeID', adminController.updateStudent);
+app.delete('/admin/students/:employeeID', adminController.archiveStudent);
 //Login CFU
 
 app.post('/login', loginController.checkCredentials);
