@@ -12,6 +12,7 @@ const incidentsController = require('./controllers/incidentsController');
 const accidentsController = require('./controllers/accidentsController');
 const referralsController = require('./controllers/referralsController');
 const loginController = require('./controllers/loginController');
+const adminController = require('./controllers/adminController');
 //App
 const app = express();
 
@@ -23,6 +24,19 @@ app.use(express.json());
 app.use(cors()); 
 
 //Routes
+
+
+// Staff Admin Controller 
+app.get('/admin/staff', adminController.getAllStaff);
+app.post('/admin/staff', adminController.createStaff);
+app.put('/admin/staff/:id', adminController.updateStaff);
+app.delete('/admin/staff/:id', adminController.archiveStaff);
+
+// Student Admin Controller
+app.get('/admin/students', adminController.getAllStudents);
+app.post('/admin/students', adminController.createStudent);
+app.put('/admin/students/:id', adminController.updateStudent);
+app.delete('/admin/students/:id', adminController.archiveStudent);
 //Login CFU
 
 app.post('/login', loginController.checkCredentials);
