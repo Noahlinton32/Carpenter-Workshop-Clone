@@ -1,6 +1,7 @@
 // Admin.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../mySite.css'
 
 const Admin = () => {
   const [staffList, setStaffList] = useState([]);
@@ -57,11 +58,6 @@ const Admin = () => {
     setEditStudentName('');
     fetchStudents();
   };
-
-  const handleArchiveStaff = async (staffId) => {
-    await axios.delete(`http://localhost:3000/admin/staff/${staffId}`);
-    fetchStaff();
-  };
   const handleUnarchiveStaff = async (id) => {
     try {
       await axios.delete(`http://localhost:3000/admin/staff/${id}`);
@@ -70,6 +66,11 @@ const Admin = () => {
       console.error('Error unarchiving staff:', error);
     }
   };
+  const handleArchiveStaff = async (staffId) => {
+    await axios.delete(`http://localhost:3000/admin/staff/${staffId}`);
+    fetchStaff();
+  };
+
   const handleUnarchiveStudent = async (id) => {
     try {
       await axios.delete(`http://localhost:3000/admin/students/${id}`);
@@ -85,27 +86,27 @@ const Admin = () => {
   };
 
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
+<div className="admin-dashboard">
+  <h1>Admin Dashboard</h1>
 
-      <div className="staff-section">
-        <h2>Staff</h2>
-        <div className="create-staff">
-          <form onSubmit={handleNewStaffSubmit}>
-            <label htmlFor="newStaffName">Add Staff: </label>
-            <input
-              id="newStaffName"
-              type="text"
-              value={newStaffName}
-              onChange={(event) => setNewStaffName(event.target.value)}
-            />
-            <button type="submit">Add</button>
-          </form>
-        </div>
-        <div className="edit-staff">
-          <form onSubmit={handleEditStaffSubmit}>
-            <label htmlFor="editStaffId">Edit Staff ID: </label>
-            <input
+  <div className="staff-section">
+    <h2>Staff</h2>
+    <div className="form-container create-staff">
+      <form onSubmit={handleNewStaffSubmit}>
+        <label htmlFor="newStaffName">Add Staff: </label>
+        <input
+          id="newStaffName"
+          type="text"
+          value={newStaffName}
+          onChange={(event) => setNewStaffName(event.target.value)}
+        />
+        <button type="submit">Add</button>
+      </form>
+    </div>
+    <div className="form-container edit-staff">
+      <form onSubmit={handleEditStaffSubmit}>
+        <label htmlFor="editStaffId">Edit Staff ID: </label>
+        <input
           id="editStaffId"
           type="text"
           value={editStaffId}
@@ -121,14 +122,14 @@ const Admin = () => {
         <button type="submit">Edit</button>
       </form>
     </div>
-    <div className="archive-staff">
+    <div className="form-container archive-staff">
       {staffList.map((staff) => (
         <button key={staff._id} onClick={() => handleArchiveStaff(staff._id)}>
           Archive {staff.name}
         </button>
       ))}
     </div>
-    <div className="unarchive-staff">
+    <div className="form-container unarchive-staff">
       {staffList
         .filter((staff) => !staff.isActive)
         .map((staff) => (
@@ -138,7 +139,7 @@ const Admin = () => {
         ))}
     </div>
 
-    <ul>
+    <ul className="staff-list">
       {staffList.map((staff) => (
         <li key={staff._id}>{staff.name}</li>
       ))}
@@ -147,7 +148,7 @@ const Admin = () => {
 
   <div className="student-section">
     <h2>Students</h2>
-    <div className="create-student">
+    <div className="form-container create-student">
       <form onSubmit={handleNewStudentSubmit}>
         <label htmlFor="newStudentName">Add Student: </label>
         <input
@@ -159,7 +160,7 @@ const Admin = () => {
         <button type="submit">Add</button>
       </form>
     </div>
-    <div className="edit-student">
+    <div className="form-container edit-student">
       <form onSubmit={handleEditStudentSubmit}>
         <label htmlFor="editStudentId">Edit Student ID: </label>
         <input
@@ -178,14 +179,14 @@ const Admin = () => {
         <button type="submit">Edit</button>
       </form>
     </div>
-    <div className="archive-student">
+    <div className="form-container archive-student">
       {studentList.map((student) => (
         <button key={student._id} onClick={() => handleArchiveStudent(student._id)}>
           Archive {student.name}
         </button>
       ))}
     </div>
-    <div className="unarchive-student">
+    <div className="form-container unarchive-student">
       {studentList
         .filter((student) => !student.isActive)
         .map((student) => (
