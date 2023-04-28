@@ -6,6 +6,7 @@ if (process.env.NODE_ENV != 'production') {
 //imports
 const express = require('express');
 const cors = require('cors');
+const morgan = require('morgan');
 const dbconnection = require('./config/dbconnection');
 const studentsController = require('./controllers/studentsController');
 const incidentsController = require('./controllers/incidentsController');
@@ -21,6 +22,7 @@ dbconnection();
 
 //Configure express app
 app.use(express.json()); 
+app.use(morgan('dev'));
 app.use(cors({
     origin: 'http://localhost:3001', // Replace this with your frontend domain
   }));
@@ -34,6 +36,7 @@ app.post('/admin/staff', adminController.createStaff);
 app.put('/admin/staff/:employeeID', adminController.updateStaff);
 app.delete('/admin/staff/:employeeID', adminController.archiveStaff);
 app.put('/admin/staff/:employeeID/password', adminController.changeStaffPassword);
+app.get('/admin/staff/exists/:employeeID', adminController.checkEmployeeIDExists);
 
 // Student Admin Controller
 app.get('/admin/students', adminController.getAllStudents);

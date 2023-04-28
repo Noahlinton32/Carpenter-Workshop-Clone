@@ -6,7 +6,6 @@ import '../mySite.css'
 const Admin = () => {
   // Staff state variables
 const [editStaffPassword, setEditStaffPassword] = useState('');
-const [editStudentPassword, setEditStudentPassword] = useState('');
 const [newStaffEmployeeID, setNewStaffEmployeeID] = useState('');
 const [newStaffPassword, setNewStaffPassword] = useState('');
 const [newStaffUsername, setNewStaffUsername] = useState('');
@@ -23,6 +22,8 @@ const [editStudentId, setEditStudentId] = useState('');
 const [editStaffName, setEditStaffName] = useState('');
 const [editStudentName, setEditStudentName] = useState('');
 const [newPassword, setNewPassword] = useState('');
+const [errorMessage, setErrorMessage] = useState(null);
+
 // Student state variables
 const [newStudentStudentID, setNewStudentStudentID] = useState('');
 const [newStudentAddress, setNewStudentAddress] = useState('');
@@ -53,23 +54,109 @@ const [newStudentIsActive, setNewStudentIsActive] = useState(true);
     setStudentList(studentResponse.data.students);
   };
 
+
   const handleChangePasswordSubmit = async (event) => {
     event.preventDefault();
     if (editStaffId) {
-      await axios.put(`http://localhost:3000/admin/staff/${editStaffId}/password`, { password: editStaffPassword });
-      setEditStaffPassword('');
+      try {
+        const response = await axios.put(`http://localhost:3000/admin/staff/${editStaffId}/password`, { password: editStaffPassword });
+        
+        if (response.status === 200) {
+          setEditStaffPassword('');
+          setErrorMessage('');
+        } else if (response.status === 400) {
+          setErrorMessage('Invalid employee ID');
+        } else {
+          setErrorMessage('Invalid employee ID');
+        }
+      } catch (error) {
+        console.log(error);
+        setErrorMessage('Invalid employee ID');
+      }
     } else {
-      alert('Please enter a valid Staff ID');
+      setErrorMessage('Please enter a valid Staff ID');
     }
   };
-
   const handleNewStaffSubmit = async (event) => {
     event.preventDefault();
-    await axios.post('http://localhost:3000/admin/staff', { name: newStaffName });
-    setNewStaffName('');
-    fetchStaff();
+  
+    // Validation checks
+    if (!newStaffEmployeeID || !newStaffPassword || !newStaffName || !newStaffUsername || !newStaffEmail) {
+      setErrorMessage('All fields are required except User Avatar.');
+      return;
+    }
+  
+    if (isNaN(newStaffEmployeeID)) {
+      setErrorMessage('Employee ID must be a number.');
+      return;
+    }
+  
+    if (newStaffPassword.length < 6) {
+      setErrorMessage('Password must be at least 6 characters long.');
+      return;
+    }
+  
+    if (!/^[\w\s]+$/.test(newStaffName)) {
+      setErrorMessage('Name must only contain letters, numbers, and spaces.');
+      return;
+    }
+  
+    if (!/^[a-zA-Z0-9_]+$/.test(newStaffUsername)) {
+      setErrorMessage('Username must only contain letters, numbers, and underscores.');
+      return;
+    }
+  
+    if (!/\S+@\S+\.\S+/.test(newStaffEmail)) {
+      setErrorMessage('Invalid email address.');
+      return;
+    }
+  
+    // Check if Employee ID already exists
+    try {
+      const response = await axios.get(`http://localhost:3000/admin/staff/exists/${newStaffEmployeeID}`);
+      if(response.status === 200 || response.status === 304){
+        console.error('Error checking Employee ID existence:');
+        setErrorMessage('Employee ID already exists.');
+      }
+      else{
+        console.error('Error checking Employee ID existence:');
+        setErrorMessage('An error occurred while checking employee ID existence.');
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        try {
+          await axios.post('http://localhost:3000/admin/staff', {
+            employeeID: newStaffEmployeeID,
+            password: newStaffPassword,
+            name: newStaffName,
+            username: newStaffUsername,
+            email: newStaffEmail,
+            isAdmin: newStaffIsAdmin ? 1 : 0,
+            isActive: newStaffIsActive ? 1 : 0,
+            userAvatar: newStaffUserAvatar
+          });
+      
+          // Clear the form
+          setNewStaffEmployeeID('');
+          setNewStaffPassword('');
+          setNewStaffName('');
+          setNewStaffUsername('');
+          setNewStaffEmail('');
+          setNewStaffIsAdmin(false);
+          setNewStaffIsActive(true);
+          setNewStaffUserAvatar('');
+      
+          // Refresh the staff list
+          fetchStaff();
+        } catch (error) {
+          console.error('Error creating new staff member:', error);
+          setErrorMessage('An error occurred while creating the new staff member.');
+        }
+      return;
+    }
+    
   };
-
+}
   const handleNewStudentSubmit = async (event) => {
     event.preventDefault();
     await axios.post('http://localhost:3000/admin/students', { name: newStudentName });
@@ -78,19 +165,36 @@ const [newStudentIsActive, setNewStudentIsActive] = useState(true);
   };
 
   const handleEditStaffSubmit = async (event) => {
-    event.preventDefault();
-    await axios.put(`http://localhost:3000/admin/staff/${editStaffId}`, { employeeID: editStaffName });
-    setEditStaffId('');
-    setEditStaffName('');
-    fetchStaff();
+    try {
+      event.preventDefault();
+      const response = await axios.put(`http://localhost:3000/admin/staff/${editStaffId}`, { name: editStaffName });
+      
+      if (response.status === 200) {
+        setEditStaffId(null);
+        setEditStaffName('');
+        setErrorMessage('');
+        fetchStaff();
+      } else if (response.status === 400) {
+        setErrorMessage('Invalid employee ID');
+      } else {
+        setErrorMessage('Invalid employee ID');
+      }
+    } catch (error) {
+      console.log(error);
+      setErrorMessage('Invalid employee ID');
+    }
   };
 
   const handleEditStudentSubmit = async (event) => {
+    try{
     event.preventDefault();
-    await axios.put(`http://localhost:3000/admin/students/${editStudentId}`, { employeeID: editStudentName });
+    await axios.put(`http://localhost:3000/admin/students/${editStudentId}`, { name: editStudentName });
     setEditStudentId('');
     setEditStudentName('');
     fetchStudents();
+  }catch(error){
+    console.log(error);
+  }
   };
   const handleUnarchiveStaff = async (id) => {
     try {
@@ -125,21 +229,9 @@ const [newStudentIsActive, setNewStudentIsActive] = useState(true);
   <h1>Admin Dashboard</h1>
   <div className="staff-section">
     <h2>Staff</h2>
-    <div className="form-container create-staff">
-      <form onSubmit={handleNewStaffSubmit}>
-        <label htmlFor="newStaffName">Add Staff: </label>
-        <input
-          id="newStaffName"
-          type="text"
-          value={newStaffName}
-          onChange={(event) => setNewStaffName(event.target.value)}
-        />
-        <button type="submit">Add</button>
-      </form>
-    </div>
     <div className="form-container edit-staff">
       <form onSubmit={handleEditStaffSubmit}>
-        <label htmlFor="editStaffId">Edit Staff ID: </label>
+        <label htmlFor="editStaffId">ID: </label>
         <input
           id="editStaffId"
           type="text"
@@ -154,25 +246,29 @@ const [newStudentIsActive, setNewStudentIsActive] = useState(true);
           onChange={(event) => setEditStaffName(event.target.value)}
         />
         <button type="submit">Edit</button>
+        <div className="error-container">
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+    </div>
       </form>
     </div>
     <div className="form-container edit-student-password">
   <form onSubmit={handleChangePasswordSubmit}>
-    <label htmlFor="editStudentId">Edit Staff Password: </label>
-    <input
-      id="editStudentId"
-      type="text"
-      value={editStudentId}
-      onChange={(event) => setEditStaffPassword(event.target.value)}
-    />
+  <label htmlFor="editStaffId">ID: </label>
+        <input
+          id="editStaffId"
+          type="text"
+          value={editStaffId}
+          onChange={(event) => setEditStaffId(event.target.value)}
+        />
     <label htmlFor="editStaffPassword">New Password: </label>
     <input
       id="editStaffPassword"
       type="text"
-      value={editStudentPassword}
+      value={editStaffPassword}
       onChange={(event) => setEditStaffPassword(event.target.value)}
     />
     <button type="submit">Edit</button>
+    {errorMessage && <p className="error-message">{errorMessage}</p>}
   </form>
 </div>
     <div className="form-container archive-staff">
@@ -201,18 +297,6 @@ const [newStudentIsActive, setNewStudentIsActive] = useState(true);
 </div>
   <div className="student-section">
     <h2>Students</h2>
-    <div className="form-container create-student">
-      <form onSubmit={handleNewStudentSubmit}>
-        <label htmlFor="newStudentName">Add Student: </label>
-        <input
-          id="newStudentName"
-          type="text"
-          value={newStudentName}
-          onChange={(event) => setNewStudentName(event.target.value)}
-        />
-        <button type="submit">Add</button>
-      </form>
-    </div>
     <div className="form-container edit-student">
       <form onSubmit={handleEditStudentSubmit}>
         <label htmlFor="editStudentId">Edit Student ID: </label>
@@ -256,8 +340,9 @@ const [newStudentIsActive, setNewStudentIsActive] = useState(true);
     </ul>
   </div>
     <div className="form-container create-staff">
-  <form onSubmit={handleNewStaffSubmit}>
-    {/* Add fields here */}
+    {errorMessage && <p className="error-message">{errorMessage}</p>}
+<form onSubmit={handleNewStaffSubmit}>
+  {/* Rest of the form */}
     {/* EmployeeID */}
     <label htmlFor="newStaffEmployeeID">Employee ID: </label>
     <input
@@ -305,20 +390,11 @@ const [newStudentIsActive, setNewStudentIsActive] = useState(true);
     />
     {/* isAdmin */}
     <label htmlFor="newStaffIsAdmin">Is Admin: </label>
-    // Add Staff form continued
     <input
       id="newStaffIsAdmin"
       type="checkbox"
       checked={newStaffIsAdmin}
       onChange={(event) => setNewStaffIsAdmin(event.target.checked)}
-    />
-    {/* isActive */}
-    <label htmlFor="newStaffIsActive">Is Active: </label>
-    <input
-      id="newStaffIsActive"
-      type="checkbox"
-      checked={newStaffIsActive}
-      onChange={(event) => setNewStaffIsActive(event.target.checked)}
     />
     {/* UserAvatar */}
     <label htmlFor="newStaffUserAvatar">User Avatar: </label>
@@ -329,129 +405,6 @@ const [newStudentIsActive, setNewStudentIsActive] = useState(true);
       onChange={(event) => setNewStaffUserAvatar(event.target.value)}
     />
     <button type="submit">Add Staff</button>
-  </form>
-</div>
-<div className="form-container create-student">
-  <form onSubmit={handleNewStudentSubmit}>
-    {/* Add fields here */}
-    {/* StudentID */}
-    <label htmlFor="newStudentStudentID">Student ID: </label>
-    <input
-      id="newStudentStudentID"
-      type="number"
-      value={newStudentStudentID}
-      onChange={(event) => setNewStudentStudentID(event.target.value)}
-      required
-    />
-    {/* Name */}
-    <label htmlFor="newStudentName">Name: </label>
-    <input
-      id="newStudentName"
-      type="text"
-      value={newStudentName}
-      onChange={(event) => setNewStudentName(event.target.value)}
-      required
-    />
-    {/* Address */}
-    <label htmlFor="newStudentAddress">Address: </label>
-    <input
-      id="newStudentAddress"
-      type="text"
-      value={newStudentAddress}
-      onChange={(event) => setNewStudentAddress(event.target.value)}
-      required
-    />
-    {/* GPA */}
-    <label htmlFor="newStudentGPA">GPA: </label>
-    <input
-      id="newStudentGPA"
-      type="number"
-      step="0.01"
-      min="0"
-      max="4"
-      value={newStudentGPA}
-      onChange={(event) => setNewStudentGPA(event.target.value)}
-      required
-    />
-    {/* Grade */}
-    <label htmlFor="newStudentGrade">Grade: </label>
-    <input
-      id="newStudentGrade"
-      type="text"
-      value={newStudentGrade}
-      onChange={(event) => setNewStudentGrade(event.target.value)}
-      required
-    />
-    {/* First Guardian's First Name */}
-    <label htmlFor="newStudentFirstNameFirstGuardian">First Guardian's First Name: </label>
-    <input
-      id="newStudentFirstNameFirstGuardian"
-      type="text"
-      value={newStudentFirstNameFirstGuardian}
-      onChange={(event) => setNewStudentFirstNameFirstGuardian(event.target.value)}
-      required
-    />
-    {/* First Guardian's Last Name */}
-    <label htmlFor="newStudentLastNameFirstGuardian">First Guardian's Last Name: </label>
-    <input
-      id="newStudentLastNameFirstGuardian"
-      type="text"
-      value={newStudentLastNameFirstGuardian}
-      onChange={(event) => setNewStudentLastNameFirstGuardian(event.target.value)}
-      required
-    />
-    {/* Second Guardian's First Name */}
-    <label htmlFor="newStudentFirstNameSecondGuardian">Second Guardian's First Name: </label>
-	 <input
-      id="newStudentFirstNameSecondGuardian"
-      type="text"
-      value={newStudentFirstNameSecondGuardian}
-      onChange={(event) => setNewStudentFirstNameSecondGuardian(event.target.value)}
-    />
-    {/* Second Guardian's Last Name */}
-    <label htmlFor="newStudentLastNameSecondGuardian">Second Guardian's Last Name: </label>
-    <input
-      id="newStudentLastNameSecondGuardian"
-      type="text"
-      value={newStudentLastNameSecondGuardian}
-      onChange={(event) => setNewStudentLastNameSecondGuardian(event.target.value)}
-    />
-    {/* Emergency Number */}
-    <label htmlFor="newStudentEmergencyNumber">Emergency Number: </label>
-    <input
-      id="newStudentEmergencyNumber"
-      type="tel"
-      value={newStudentEmergencyNumber}
-      onChange={(event) => setNewStudentEmergencyNumber(event.target.value)}
-      required
-    />
-    {/* Enrollment Date */}
-    <label htmlFor="newStudentEnrollmentDate">Enrollment Date: </label>
-    <input
-      id="newStudentEnrollmentDate"
-      type="date"
-      value={newStudentEnrollmentDate}
-      onChange={(event) => setNewStudentEnrollmentDate(event.target.value)}
-      required
-    />
-    {/* Graduation Date */}
-    <label htmlFor="newStudentGraduationDate">Graduation Date: </label>
-    <input
-      id="newStudentGraduationDate"
-      type="date"
-      value={newStudentGraduationDate}
-      onChange={(event) => setNewStudentGraduationDate(event.target.value)}
-      required
-    />
-    {/* isActive */}
-    <label htmlFor="newStudentIsActive">Is Active: </label>
-    <input
-      id="newStudentIsActive"
-      type="checkbox"
-      checked={newStudentIsActive}
-      onChange={(event) => setNewStudentIsActive(event.target.checked)}
-    />
-    <button type="submit">Add Student</button>
   </form>
 </div>
 </div>

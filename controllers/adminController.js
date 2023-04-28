@@ -12,16 +12,62 @@ const createStaff = async (req, res) => {
   res.json({ staff: staff });
 };
 
-const changeStaffPassword = async (req, res) => {
-  const staffId = req.params.employeeID;
-  const newPassword = req.body.password;
-  const staff = await Staff.findByIdAndUpdate(staffId, { password: newPassword }, { new: true });
-  res.json({ staff: staff });
+const checkEmployeeIDExists = async (req, res) => {
+  try {
+    const staffId = req.params.employeeID;
+    if (isNaN(staffId)) {
+      res.status(404).json({ message: 'Invalid employee ID' });
+      return;
+    }
+    const staff = await Staff.findOne({ employeeID: staffId });
+    if (!staff) {
+      res.status(404).json({ message: 'Staff not found' });
+    } else {
+      res.json({ staff: staff });
+    }
+  } catch (error) {
+    console.error('Error checking staff ID existence:', error);
+    res.status(500).json({ error: 'An error occurred while checking staff ID existence.' });
+  }
+};
+const updateStaff = async (req, res) => {
+  try {
+    const employeeID = req.params.employeeID;
+
+    if (isNaN(employeeID)) {
+      res.status(400).json({ message: 'Invalid employee ID' });
+      return;
+    }
+
+    const staff = await Staff.findOneAndUpdate({ employeeID: employeeID }, req.body, { new: true });
+
+    if (!staff) {
+      res.status(404).json({ message: 'Staff not found' });
+      return;
+    }
+
+    res.json({ staff: staff });
+  } catch (error) {
+    res.status(500).json({ message: 'Error editing staff' });
+  }
 };
 
-const updateStaff = async (req, res) => {
-  const staffId = req.params.employeeID;
-  const staff = await Staff.findByIdAndUpdate(staffId, req.body, { new: true });
+const changeStaffPassword = async (req, res) => {
+  const employeeID = req.params.employeeID;
+  const newPassword = req.body.password;
+
+  if (isNaN(employeeID)) {
+    res.status(400).json({ message: 'Invalid employee ID' });
+    return;
+  }
+
+  const staff = await Staff.findOneAndUpdate({ employeeID: employeeID }, { password: newPassword }, { new: true });
+
+  if (!staff) {
+    res.status(404).json({ message: 'Staff not found' });
+    return;
+  }
+
   res.json({ staff: staff });
 };
 
@@ -75,4 +121,5 @@ module.exports = {
   updateStudent: updateStudent,
   archiveStudent: archiveStudent,
   changeStaffPassword: changeStaffPassword,
+  checkEmployeeIDExists: checkEmployeeIDExists
 };
