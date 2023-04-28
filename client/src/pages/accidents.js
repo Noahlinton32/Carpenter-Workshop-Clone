@@ -89,7 +89,7 @@ const handleDeleteAccident = async (id) => {
 
     <div></div>
     <div>
-    <NavLink to="/accidents/edit">
+    <NavLink to={`/accidents/edit/${accident._id}`}>
     <Button style={{backgroundColor: '#D1913C', color:'#000', border: '0'}}>Edit Accident</Button>
     </NavLink>
     </div>

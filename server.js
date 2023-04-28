@@ -66,10 +66,10 @@ app.delete('/incidents/:id', incidentsController.deleteIncident);
 
 //Accidents CRUD
 app.get('/accidents', accidentsController.getAllAccidents);
-app.get('/accidents/:id', accidentsController.getOneAccident );
 app.post("/accidents", accidentsController.createAccident);
 app.put('/accidents/:id', accidentsController.updateAccident);
 app.delete('/accidents/:id', accidentsController.deleteAccident);
+app.get('/accidents/:id', accidentsController.getAccidentById);
 
 //Referrals CRUD
 app.get('/referrals', referralsController.getAllReferrals);
