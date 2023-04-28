@@ -24,20 +24,6 @@ const [editStudentName, setEditStudentName] = useState('');
 const [newPassword, setNewPassword] = useState('');
 const [errorMessage, setErrorMessage] = useState(null);
 
-// Student state variables
-const [newStudentStudentID, setNewStudentStudentID] = useState('');
-const [newStudentAddress, setNewStudentAddress] = useState('');
-const [newStudentGPA, setNewStudentGPA] = useState('');
-const [newStudentGrade, setNewStudentGrade] = useState('');
-const [newStudentFirstNameFirstGuardian, setNewStudentFirstNameFirstGuardian] = useState('');
-const [newStudentLastNameFirstGuardian, setNewStudentLastNameFirstGuardian] = useState('');
-const [newStudentFirstNameSecondGuardian, setNewStudentFirstNameSecondGuardian] = useState('');
-const [newStudentLastNameSecondGuardian, setNewStudentLastNameSecondGuardian] = useState('');
-const [newStudentEmergencyNumber, setNewStudentEmergencyNumber] = useState('');
-const [newStudentEnrollmentDate, setNewStudentEnrollmentDate] = useState('');
-const [newStudentGraduationDate, setNewStudentGraduationDate] = useState('');
-const [newStudentIsActive, setNewStudentIsActive] = useState(true);
-
   // Fetch data from API
   useEffect(() => {
     fetchStaff();

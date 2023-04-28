@@ -18,10 +18,8 @@ const Login = () => {
   // form submission behavior, which would cause a page reload and disrupt the
   // user experience. Instead, we can call getLogin directly to perform the
   // authentication process without causing any disruption to the user.
-  
-
+  const [errorMessage, setErrorMessage] = useState("");
   const getLogin = async () => {
-    // Make a request to the server to authenticate the user
     try {
       const res = await axios.post("http://localhost:3000/login", {
         username: Login.username,
@@ -29,19 +27,24 @@ const Login = () => {
       });
       console.log("Response from server:", res.data);
       if (res.data.success) {
-        loginUser(res.data);
-        setRedirectToDashboard(true);
+        if (res.data.user.isActive) { // Check if the user is active
+          loginUser(res.data);
+          setRedirectToDashboard(true);
+        } else {
+          // Set an error message if the user is not active
+          setErrorMessage("Your account is not active, please contact your system administrator.");
+        }
       } else {
+        setErrorMessage("Login failed"); // Set an error message if the login failed
       }
     } catch (error) {
       console.error("Error during login:", error);
     }
   };
-  // Handler for input changes in the login form
-  const handleChange = (e) => {
-    setLogin({ ...Login, [e.target.name]: e.target.value });
-  };
-  
+    // Handler for input changes in the login form
+    const handleChange = (e) => {
+      setLogin({ ...Login, [e.target.name]: e.target.value });
+    };
   const handleSubmit = (e) => {
     e.preventDefault();
     getLogin();
@@ -55,10 +58,12 @@ const Login = () => {
     <div className="login-formParent">
       <div className="login-page">
         <form className="login-form" onSubmit={handleSubmit}>
+          
           <img src={logo} className="login-logo" alt="carpetner logo" />
           <br />
           <div className="login-border">
             <p className="login-text">Student Access Management Portal (SAMP)</p>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
             <input
               type="text"
               placeholder="Employee ID"

@@ -41,8 +41,8 @@ app.get('/admin/staff/exists/:employeeID', adminController.checkEmployeeIDExists
 // Student Admin Controller
 app.get('/admin/students', adminController.getAllStudents);
 app.post('/admin/students', adminController.createStudent);
-app.put('/admin/students/:employeeID', adminController.updateStudent);
-app.delete('/admin/students/:employeeID', adminController.archiveStudent);
+app.put('/admin/students/:studentID', adminController.updateStudent);
+app.delete('/admin/students/:studentID', adminController.archiveStudent);
 //Login CFU
 
 app.post('/login', loginController.checkCredentials);
