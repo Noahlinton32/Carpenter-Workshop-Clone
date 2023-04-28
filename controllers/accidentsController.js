@@ -100,15 +100,19 @@ const updateAccident = async (req, res) =>{
     res.json({accident:accident})
 };
 
-//SETUP DELETE CONTROLLER AND ROUTE IN SERVER.JS
-const deleteAccident = async (req,res) => {
-    //find accident to delete
-
-    //delete accident
-
-    //respond with deleted accident
-
-}
+const deleteAccident = async (req, res) => {
+  try {
+    const accident = await Accident.findByIdAndDelete(req.params.id);
+    if (!accident) {
+      res.status(404).json({ message: 'Accident not found' });
+    } else {
+      res.status(200).json({ message: 'Accident deleted successfully', accident: accident });
+    }
+  } catch (error) {
+    console.error('Error deleting accident:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 module.exports = {
     getAllAccidents: getAllAccidents,

@@ -26,29 +26,30 @@ const GlobalStyle = createGlobalStyle`
 
 
 function Accidents() {
-  // State
   const [accidents, setAccidents] = useState(null);
-  
-  //User Effect
   useEffect (() => {
     getAccidents();
   }, []);
 
-  //Functions 
   const getAccidents = async () => {
-    //get students
     const res = await axios.get('http://localhost:3000/accidents');
-    //set state
     setAccidents(res.data.accidents);
   };
-  
-  
+
+const handleDeleteAccident = async (id) => {
+  try {
+    await axios.delete(`http://localhost:3000/accidents/${id}`);
+    setAccidents(accidents.filter((accident) => accident._id !== id));
+  } catch (error) {
+    console.error('Error deleting accident:', error.response);
+  }
+};
   return <div style={{marginLeft: '45%'}}>
     <GlobalStyle/>
     <h2>Accidents</h2>
     <div style={{display: 'grid', marginLeft: '-45%'}}>
     {accidents && accidents.map (accident => {
-        return <div key={accident.id}> 
+        return <div key={accident._id}> 
 <td>
 <div style={{backgroundColor: '#fff',
                 display: 'flex',
@@ -93,7 +94,10 @@ function Accidents() {
     </NavLink>
     </div>
     <div>
-    <Button style={{backgroundColor: '#c75252', color:'#000', border: '0'}}>Delete Accident</Button>
+    <Button
+      style={{ backgroundColor: '#c75252', color: '#000', border: '0' }}
+      onClick={() => handleDeleteAccident(accident._id)}
+    > Delete Accident </Button>
     </div> 
       </div>
   </Collapsible>

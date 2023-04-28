@@ -25,6 +25,8 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(cors({
     origin: 'http://localhost:3001', // Replace this with your frontend domain
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Add the allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization']
   }));
 
 //Routes
@@ -67,7 +69,6 @@ app.get('/accidents', accidentsController.getAllAccidents);
 app.get('/accidents/:id', accidentsController.getOneAccident );
 app.post("/accidents", accidentsController.createAccident);
 app.put('/accidents/:id', accidentsController.updateAccident);
-//ADD DELETE REQUEST ROUTE HERE AND CONTROLLER IN ACCIDENTSCONTROLLER.JS
 app.delete('/accidents/:id', accidentsController.deleteAccident);
 
 //Referrals CRUD
