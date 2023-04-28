@@ -23,29 +23,31 @@ const GlobalStyle = createGlobalStyle`
 `
 
 function Referrals() {
-  // State
   const [referrals, setReferrals] = useState(null);
   
-  //User Effect
   useEffect (() => {
     getReferrals();
   }, []);
 
-  //Functions 
   const getReferrals = async () => {
-    //get incidents
     const res = await axios.get('http://localhost:3000/referrals');
-    //set state
     setReferrals(res.data.referrals);
   };
-  
+  const deleteReferral = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3000/referrals/${id}`);
+      setReferrals(referrals.filter((referral) => referral._id !== id));
+    } catch (error) {
+      console.error("Error deleting referral:", error);
+    }
+  };
   
   return <div style={{marginLeft: '45%'}}>
     <GlobalStyle/>
     <h2>Referrals</h2>
     <div style={{display: 'grid', marginLeft: '-45%'}}>
     {referrals && referrals.map (referral => {
-        return <div key={referral.id}> 
+        return <div key={referral._id}> 
 <td>
 <div style={{backgroundColor: '#fff',
                 display: 'flex',
@@ -78,12 +80,17 @@ function Referrals() {
     <p>Parent Contact Number: {referral.parentPhoneNumber}</p>
     <div></div>
     <div>
-    <NavLink to="/referrals/edit">
+    <NavLink to={`/referrals/edit/${referral._id}`}>
     <Button style={{backgroundColor: '#D1913C', color:'#000', border: '0'}}>Edit Referral</Button>
     </NavLink>
     </div>
     <div>
-    <Button style={{backgroundColor: '#c75252', color:'#000', border: '0'}}>Delete Referral</Button>
+    <Button
+  onClick={() => deleteReferral(referral._id)}
+  style={{ backgroundColor: "#c75252", color: "#000", border: "0" }}
+>
+  Delete Referral
+</Button>
     </div> 
       </div>
   </Collapsible>

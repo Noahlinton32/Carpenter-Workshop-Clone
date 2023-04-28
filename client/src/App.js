@@ -16,6 +16,8 @@ import CreateReferrals from './pages/CreateReferral';
 import Profile from './pages/profile';
 import AdminProfile from './pages/Admin';
 import EditAccident from './pages/editAccident';
+import EditIncident from './pages/editIncident';
+import EditReferral from './pages/editReferral';
 import { AuthProvider,useAuth} from './authContext';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 function App() {
@@ -61,6 +63,12 @@ return (
         <CreateIncidents/>
         </RequireAuth>
         } />
+        <Route path="/incidents/edit/:id" 
+        element={
+          <RequireAuth>
+        <EditIncident/>
+        </RequireAuth>
+        } />
         <Route path="/accidents" 
         element={
           <RequireAuth>
@@ -91,6 +99,12 @@ return (
         <CreateReferrals/>
         </RequireAuth>
         
+        } />
+        <Route path="/referrals/edit/:id" 
+        element={
+          <RequireAuth>
+        <EditReferral/>
+        </RequireAuth>
         } />
         <Route path="/profile" 
         element={

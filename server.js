@@ -58,11 +58,10 @@ app.put('/students/:id', studentsController.updateStudent);
 
 //Incidents CRUD
 app.get('/incidents', incidentsController.getAllIncidents);
-app.get('/incidents/:id', incidentsController.getOneIncident );
 app.post("/incidents", incidentsController.createIncident);
 app.put('/incidents/:id', incidentsController.updateIncident);
-//ADD DELETE REQUEST ROUTE HERE AND CONTROLLER IN INCIDENTSCONTROLLER.JS
 app.delete('/incidents/:id', incidentsController.deleteIncident);
+app.get('/incidents/:id', incidentsController.getIncidentById);
 
 //Accidents CRUD
 app.get('/accidents', accidentsController.getAllAccidents);
@@ -73,12 +72,10 @@ app.get('/accidents/:id', accidentsController.getAccidentById);
 
 //Referrals CRUD
 app.get('/referrals', referralsController.getAllReferrals);
-app.get('/referrals/:id', referralsController.getOneReferral );
 app.post("/referrals", referralsController.createReferral);
 app.put('/referrals/:id', referralsController.updateReferral);
-//ADD DELETE REQUEST ROUTE HERE AND CONTROLLER IN ReferralsCONTROLLER.JS
 app.delete('/referrals/:id', referralsController.deleteReferral);
-
+app.get('/referrals/:id', referralsController.getReferralById);
 //Server
 app.listen(process.env.PORT , function (){
     console.log('Listening on port:'+process.env.PORT);

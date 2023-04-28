@@ -31,7 +31,6 @@ const EditAccident = () => {
             const res = await axios.get(`http://localhost:3000/accidents/${id}`);
             const accidentData = res.data.accident;
             accidentData.date = formatDate(accidentData.date);
-            console.log(accidentData)
             setForm(accidentData);
           } catch (error) {
             console.error("Failed to fetch accident data:", error);

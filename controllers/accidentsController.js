@@ -50,11 +50,16 @@ const createAccident =  async (req, res) => {
 };
 
 const updateAccident = async (req, res) => {
+  try{
   const { id } = req.params;
   const updatedAccident = await Accident.findByIdAndUpdate(id, req.body, {
     new: true,
   });
   res.json({ accident: updatedAccident });
+}catch(error){
+  res.status(500).json({ error: "An error occurred while updating the incident." });
+  }
+  
 };
 
 const getAccidentById = async (req, res) => {
