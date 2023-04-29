@@ -8,9 +8,7 @@ import styled, {createGlobalStyle, css} from 'styled-components';
 const GlobalStyle = createGlobalStyle`
   html{
     height: 100%;
-
   }
-
   body{
     font-family: Arial, Helvetica, sans-serif;
     background: linear-gradient(to top, #d1913c, #ffd194);
@@ -43,7 +41,6 @@ const StyledFormWrapper = styled.div`
   height: 100%;
   padding: 0 20px;
   padding-bottom: 2%;
-
 `
 const StyledForm = styled.form`
   width: 100%;
@@ -59,10 +56,8 @@ const StyledInput = styled.input`
   display: block;
   width: 100%;
   ${sharedStyles}
-
 `
 const StyledTextArea = styled.textarea`
-
 `
 
 const StyledButton = styled.button`
@@ -76,7 +71,6 @@ const StyledButton = styled.button`
   padding: 0 20px;
   cursor: pointer;
   boz-sizing: border-box;
-
 `
 
 const StyledFieldset = styled.fieldset`
@@ -88,11 +82,9 @@ const StyledFieldset = styled.fieldset`
   legend{
     padding: 0 10px;
   }
-
   label{
     padding-right: 20px;
   }
-
   input{
     margin-right: 10px;
   }
@@ -141,10 +133,22 @@ const EditAccident = () => {
         };
         getAccident();
       }, [id]);
-
+      const removeCircularReferences = (obj) => {
+        const seen = new WeakSet();
+        return JSON.parse(JSON.stringify(obj, (key, value) => {
+          if (typeof value === 'object' && value !== null) {
+            if (seen.has(value)) {
+              return;
+            }
+            seen.add(value);
+          }
+          return value;
+        }));
+      };
     const handleSubmit = async (event) => {
       event.preventDefault();
-      await axios.put(`http://localhost:3000/accidents/${id}`, form);
+      const formWithoutCircularReferences = removeCircularReferences(form);
+      await axios.put(`http://localhost:3000/accidents/${id}`, formWithoutCircularReferences);
       navigate('/accidents');
     };
   
@@ -159,7 +163,7 @@ const EditAccident = () => {
          <div>
         <label htmlFor="accidentReportNumber">Accident Report Number:</label>
         <StyledInput
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, accidentReportNumber: event.target.value })}
           value={form.accidentReportNumber}
           type="number"
           name="accidentReportNumber"
@@ -169,114 +173,109 @@ const EditAccident = () => {
         <div>
           <label htmlFor="studentID">Student ID:</label>
           <StyledInput
-            onChange={setForm}
+          onChange={(event) => setForm({ ...form, studentID: event.target.value })}
             value={form.studentID}
             name="studentID"
           />
         </div>
-        </div>
-
-          <label htmlFor="employeeID">Employee ID:</label>
-          <StyledInput
-            onChange={setForm}
-            value={form.employeeID}
-            name="employeeID"
-          />
-
-      
+        
         <label htmlFor="school">School:</label>
         <StyledInput
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, school: event.target.value })}
           value={form.school}
           name="school"
         />
-        <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '50% 50%' }}>    
-        <div>
+        <label htmlFor="employeeID">Employee ID:</label>
+        <StyledInput
+          onChange={(event) => setForm({ ...form, employeeID: event.target.value })}
+          value={form.employeeID}
+          name="employeeID"
+        />
         <label htmlFor="room">Room:</label>
         <StyledInput
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, room: event.target.value })}
           value={form.room}
           name="room"
         />
-        </div>
-      <div>
         <label htmlFor="date">Date:</label>
         <StyledInput
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, Date: event.target.value })}
           value={form.date}
           type="date"
           name="date"
         />
-        </div>
-      </div>
+
         <label htmlFor="location">Location:</label>
         <StyledInput
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, location: event.target.value })}
           value={form.location}
           name="location"
         />
-      <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '50% 50%' }}>
-        <div>
           <label htmlFor="employeeIDInvolved">Staff Involved:</label>
           <StyledInput
-            onChange={setForm}
+            onChange={(event) => setForm({ ...form, employeeIDInvolved: event.target.value })}
             value={form.employeeIDInvolved}
             name="employeeIDInvolved"
             type="number"
           />
-          </div>
-      <div>
           <label htmlFor="studentIDInvolved">Other Student Involved ID:</label>
           <StyledInput
-            onChange={setForm}
+            onChange={(event) => setForm({ ...form, studentIDInvolved: event.target.value })}
             value={form.studentIDInvolved}
             name="studentIDInvolved"
           />
-        </div>
-        </div>
         <label htmlFor="cause">Cause:</label>
         <StyledInput
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, cause: event.target.value })}
           value={form.cause}
           name="cause"
         />
-      
+
         <label htmlFor="response">Response:</label>
         <StyledInput
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, response: event.target.value })}
           value={form.response}
           name="response"
         />
-      
+
         <label htmlFor="preventativeAction">Preventative Action Taken:</label>
         <StyledInput
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, preventativeAction: event.target.value })}
           value={form.preventativeAction}
           name="preventativeAction"
         />
-      
+
         <label htmlFor="witnesses">Witness:</label>
         <StyledInput
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, witnesses: event.target.value })}
           value={form.witnesses}
           name="witnesses"
         />
-      
-        <StyledFieldset
-          onChange={setForm}
-          value={form.signed}
-          name="signed"
-        >
-        <legend>Signed?</legend>
-                <label>
-                  <input type="radio" value="Yes" name="signed" />
-                  Yes
-                </label>
-                <label>
-                  <input type="radio" value="No" name="signed" />
-                  No
-                </label>
+
+        <StyledFieldset>
+          <legend>Signed?</legend>
+          <label>
+            <input
+              type="radio"
+              value="Yes"
+              name="signed"
+              checked={form.signed === "Yes"}
+              onChange={(event) => setForm({ ...form, signed: event.target.value })}
+            />
+            Yes
+          </label>
+          <label>
+            <input
+              type="radio"
+              value="No"
+              name="signed"
+              checked={form.signed === "No"}
+              onChange={(event) => setForm({ ...form, signed: event.target.value })}
+            />
+            No
+          </label>
         </StyledFieldset>
+        </div>
       
         <StyledButton type="submit">Update Accident</StyledButton>
       </StyledForm>

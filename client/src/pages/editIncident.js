@@ -47,10 +47,22 @@ const EditIncident = () => {
     getIncident();
   }, [id]);
 
-
+  const removeCircularReferences = (obj) => {
+    const seen = new WeakSet();
+    return JSON.parse(JSON.stringify(obj, (key, value) => {
+      if (typeof value === 'object' && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    }));
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await axios.put(`http://localhost:3000/incidents/${id}`, form);
+    const formWithoutCircularReferences = removeCircularReferences(form);
+    await axios.put(`http://localhost:3000/incidents/${id}`, formWithoutCircularReferences);
     navigate('/incidents');
   };
 

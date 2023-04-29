@@ -24,10 +24,24 @@ const EditStudent = () => {
     const date = new Date(dateString);
     return date.toISOString().split('T')[0];
   };
+  const removeCircularReferences = (obj) => {
+    const seen = new WeakSet();
+    return JSON.parse(JSON.stringify(obj, (key, value) => {
+      if (typeof value === 'object' && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    }));
+  };
   useEffect(() => {
-    const getStudent = async () => {
+    const getStudent = async (event) => {
       try {
-        const res = await axios.get(`http://localhost:3000/incidents/${id}`);
+        event.preventDefault();
+        const formWithoutCircularReferences = removeCircularReferences(form);
+        const res = await axios.get(`http://localhost:3000/incidents/${id}`, formWithoutCircularReferences);
         const StudentData = res.data.incident;
         StudentData.date = formatDate(StudentData.date);
         setForm(StudentData);

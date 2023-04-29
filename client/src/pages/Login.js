@@ -9,9 +9,7 @@ import styled, {createGlobalStyle, css} from 'styled-components';
 const GlobalStyle = createGlobalStyle`
   html{
     height: 100%;
-
   }
-
   body{
     font-family: Arial, Helvetica, sans-serif;
     background: linear-gradient(to top, #d1913c, #ffd194);
@@ -39,7 +37,6 @@ const StyledFormWrapper = styled.div`
   height: 100%;
   padding: 0 20px;
   padding-bottom: 2%;
-
 `
 const StyledForm = styled.form`
   width: 100%;
@@ -55,10 +52,8 @@ const StyledInput = styled.input`
   display: block;
   width: 100%;
   ${sharedStyles}
-
 `
 const StyledTextArea = styled.textarea`
-
 `
 
 const StyledButton = styled.button`
@@ -72,7 +67,6 @@ const StyledButton = styled.button`
   padding: 0 20px;
   cursor: pointer;
   boz-sizing: border-box;
-
 `
 
 const styledFieldset = styled.fieldset`
@@ -84,11 +78,9 @@ const styledFieldset = styled.fieldset`
   legend{
     padding: 0 10px;
   }
-
   label{
     padding-right: 20px;
   }
-
   input{
     margin-right: 10px;
   }

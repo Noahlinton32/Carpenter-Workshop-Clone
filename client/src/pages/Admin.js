@@ -283,25 +283,6 @@ const [errorMessage, setErrorMessage] = useState(null);
 </div>
   <div className="student-section">
     <h2>Students</h2>
-    <div className="form-container edit-student">
-      <form onSubmit={handleEditStudentSubmit}>
-        <label htmlFor="editStudentId">Edit Student ID: </label>
-        <input
-          id="editStudentId"
-          type="text"
-          value={editStudentId}
-          onChange={(event) => setEditStudentId(event.target.value)}
-        />
-        <label htmlFor="editStudentName">Edit Student Name: </label>
-        <input
-          id="editStudentName"
-          type="text"
-          value={editStudentName}
-          onChange={(event) => setEditStudentName(event.target.value)}
-        />
-        <button type="submit">Edit</button>
-      </form>
-    </div>
     <div className="form-container archive-student">
       {studentList.map((student) => (
         <button key={student._id} onClick={() => handleArchiveStudent(student._id)}>

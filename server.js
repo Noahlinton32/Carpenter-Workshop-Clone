@@ -7,6 +7,7 @@ if (process.env.NODE_ENV != 'production') {
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 const dbconnection = require('./config/dbconnection');
 const studentsController = require('./controllers/studentsController');
 const incidentsController = require('./controllers/incidentsController');
@@ -21,6 +22,8 @@ const app = express();
 dbconnection();
 
 //Configure express app
+app.use(bodyParser.json({ limit: '500mb' }));
+app.use(bodyParser.urlencoded({ limit: '500mb', extended: true, parameterLimit: 5000000 }));
 app.use(express.json()); 
 app.use(morgan('dev'));
 app.use(cors({
