@@ -54,52 +54,33 @@ const createStudent =  async (req, res) => {
     res.json({student: student})
 };
 
-const updateStudent = async (req, res) =>{
-    //get id
-    const studID = req.params.id;
-
-    //get data off req body 
-    const studentID = req.body.studentID;
-    const name = req.body.name;
-    const address = req.body.address;
-    const gpa = req.body.gpa;
-    const grade = req.body.grade;
-    const firstNameFirstGuardian = req.body.firstNameFirstGuardian;
-    const lastNameFirstGuardian = req.body.lastNameFirstGuardian;
-    const firstNameSecondGuardian = req.body.firstNameSecondGuardian;
-    const lastNameSecondGuardian = req.body.lastNameSecondGuardian;
-    const emergencyNumber = req.body.emergencyNumber;
-    const enrollmentDate = req.body.enrollmentDate;
-    const graduationDate = req.body.graduationDate;
-    const isActive = req.body.isActive;
-
-    //find and update
-        await Student.findOneAndUpdate({studentID: studID}, {
-        studentID: studentID,
-        name: name,
-        address: address,
-        gpa: gpa,
-        grade: grade,
-        firstNameFirstGuardian: firstNameFirstGuardian, 
-        lastNameFirstGuardian: lastNameFirstGuardian, 
-        firstNameSecondGuardian: firstNameSecondGuardian,
-        lastNameSecondGuardian: lastNameSecondGuardian,
-        emergencyNumber: emergencyNumber,
-        enrollmentDate: enrollmentDate,
-        graduationDate: graduationDate,
-        isActive: isActive,
-
-    });
-    //find updated student
-    const student = await Student.findOne({studentID: studID});
-    //respond
-    res.json({student:student})
-};
-
+const updateStudent = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedStudents = await Student.findByIdAndUpdate(id, req.body, {
+          new: true,
+        });
+        res.json({ incident: updatedStudents});
+    } catch (error) {
+      res.status(500).json({ error: "An error occurred while updating the incident." });
+    }
+  };
+  const getStudentById = async (req, res) => {
+    try {
+      const Students = await Student.findById(req.params.id);
+      if (!Students) {
+        return res.status(404).json({ message: 'Student not found' });
+      }
+      res.json({ incident });
+    } catch (err) {
+      res.status(500).json({ message: 'Server error' });
+    }
+  };
 
 module.exports = {
     getAllStudents: getAllStudents,
     getOneStudent: getOneStudent,
     createStudent: createStudent,
-    updateStudent: updateStudent
+    updateStudent: updateStudent,
+    getStudentById: getStudentById,
 }

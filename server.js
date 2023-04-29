@@ -54,7 +54,7 @@ app.get('/students', studentsController.getAllStudents);
 app.get('/students/:id', studentsController.getOneStudent );
 app.post("/students", studentsController.createStudent);
 app.put('/students/:id', studentsController.updateStudent);
-
+app.get('/students/:id', studentsController.getStudentById);
 
 //Incidents CRUD
 app.get('/incidents', incidentsController.getAllIncidents);

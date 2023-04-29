@@ -18,6 +18,7 @@ import AdminProfile from './pages/Admin';
 import EditAccident from './pages/editAccident';
 import EditIncident from './pages/editIncident';
 import EditReferral from './pages/editReferral';
+import EditStudent from './pages/editStudent';
 import { AuthProvider,useAuth} from './authContext';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 function App() {
@@ -49,6 +50,12 @@ return (
         element={
           <RequireAuth>
         <CreateStudents/>
+        </RequireAuth>
+        } />
+        <Route path="/students/edit/:id" 
+        element={
+          <RequireAuth>
+        <EditStudent/>
         </RequireAuth>
         } />
         <Route path="/incidents" 
