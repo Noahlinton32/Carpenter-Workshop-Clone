@@ -178,31 +178,39 @@ const EditAccident = () => {
             name="studentID"
           />
         </div>
-        
+        </div>
+
         <label htmlFor="school">School:</label>
         <StyledInput
           onChange={(event) => setForm({ ...form, school: event.target.value })}
           value={form.school}
           name="school"
         />
+        <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '50% 50%' }}>
+        <div>
         <label htmlFor="employeeID">Employee ID:</label>
         <StyledInput
           onChange={(event) => setForm({ ...form, employeeID: event.target.value })}
           value={form.employeeID}
           name="employeeID"
         />
+        </div>
+        <div>
         <label htmlFor="room">Room:</label>
         <StyledInput
           onChange={(event) => setForm({ ...form, room: event.target.value })}
           value={form.room}
           name="room"
         />
+        </div>
+        </div>
         <label htmlFor="date">Date:</label>
         <StyledInput
           onChange={(event) => setForm({ ...form, Date: event.target.value })}
           value={form.date}
           type="date"
           name="date"
+          style={{width: '50%'}}
         />
 
         <label htmlFor="location">Location:</label>
@@ -211,6 +219,8 @@ const EditAccident = () => {
           value={form.location}
           name="location"
         />
+        <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '50% 50%' }}>
+          <div>
           <label htmlFor="employeeIDInvolved">Staff Involved:</label>
           <StyledInput
             onChange={(event) => setForm({ ...form, employeeIDInvolved: event.target.value })}
@@ -218,12 +228,16 @@ const EditAccident = () => {
             name="employeeIDInvolved"
             type="number"
           />
+          </div>
+          <div>
           <label htmlFor="studentIDInvolved">Other Student Involved ID:</label>
           <StyledInput
             onChange={(event) => setForm({ ...form, studentIDInvolved: event.target.value })}
             value={form.studentIDInvolved}
             name="studentIDInvolved"
           />
+          </div>
+          </div>
         <label htmlFor="cause">Cause:</label>
         <StyledInput
           onChange={(event) => setForm({ ...form, cause: event.target.value })}
@@ -275,7 +289,7 @@ const EditAccident = () => {
             No
           </label>
         </StyledFieldset>
-        </div>
+
       
         <StyledButton type="submit">Update Accident</StyledButton>
       </StyledForm>
