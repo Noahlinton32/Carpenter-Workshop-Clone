@@ -185,6 +185,8 @@ function CreateAccidents() {
     <StyledFormWrapper>
       <StyledForm onSubmit={CreateAccident}>
         <h2 style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Create Accident</h2>
+        <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '1fr 1fr' }}>
+        <div>
           <label htmlFor="accidentReportNumber">Accident Report Number: </label>
           <StyledInput 
             onChange={UpdateCreateFormField}
@@ -192,7 +194,7 @@ function CreateAccidents() {
             type='Number' 
             name="accidentReportNumber"
           />
-          <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '1fr 1fr' }}>
+          </div>
               <div>
                 <label htmlFor="studentID">Student ID: </label>
                 <StyledInput
@@ -201,33 +203,39 @@ function CreateAccidents() {
                   name="studentID"
                 />
               </div>
-              <div>
-              <label htmlFor="employeeID">Employee ID: </label>
-                <StyledInput
-                onChange={UpdateCreateFormField}
-                value={createForm.employeeID}
-                name="employeeID"
-                />
               </div>
-            </div>
           <label htmlFor="school">School: </label>
           <StyledInput
             onChange={UpdateCreateFormField}
             value={createForm.school}
             name="school"
-          />          
+          />   
+          <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '1fr 1fr' }}>
+             
+           <div>
+            <label htmlFor="employeeID">Employee ID: </label>
+              <StyledInput
+              onChange={UpdateCreateFormField}
+              value={createForm.employeeID}
+              name="employeeID"
+              />
+            </div>
+            <div>  
           <label htmlFor="room">Room: </label>
           <StyledInput
             onChange={UpdateCreateFormField}
             value={createForm.room}
             name="room"
           />
+          </div>
+          </div>
           <label htmlFor="date">Date: </label>
           <StyledInput
             onChange={UpdateCreateFormField}
             value={createForm.date}
             type="date"
             name="date"
+            style={{width:'50%'}}
           />
           <label htmlFor="location">Location: </label>
           <StyledInput
