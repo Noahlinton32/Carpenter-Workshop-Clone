@@ -67,15 +67,15 @@ const EditIncident = () => {
   };
 
   return (
-    <div>
-      <h1>Edit Incident</h1>
-      <form onSubmit={handleSubmit}>
+          <div>
+            <h1>Edit Incident</h1>
+            <form onSubmit={handleSubmit}>
         <label htmlFor="incidentReportNumber">Incident Report Number:</label>
         <input
           type="number"
           name="incidentReportNumber"
           value={form.incidentReportNumber}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, incidentReportNumber: event.target.value })}
         />
         <br />
 
@@ -84,7 +84,7 @@ const EditIncident = () => {
           type="number"
           name="studentID"
           value={form.studentID}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, studentID: event.target.value })}
         />
         <br />
 
@@ -93,7 +93,7 @@ const EditIncident = () => {
           type="text"
           name="agencyOrProgram"
           value={form.agencyOrProgram}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, agencyOrProgram: event.target.value })}
         />
         <br />
 
@@ -102,7 +102,7 @@ const EditIncident = () => {
           type="text"
           name="contactNumber"
           value={form.contactNumber}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, contactNumber: event.target.value })}
         />
         <br />
 
@@ -111,7 +111,7 @@ const EditIncident = () => {
           type="text"
           name="address"
           value={form.address}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, address: event.target.value })}
         />
         <br />
 
@@ -120,7 +120,7 @@ const EditIncident = () => {
           type="text"
           name="incidentType"
           value={form.incidentType}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, incidentType: event.target.value })}
         />
         <br />
 
@@ -129,7 +129,7 @@ const EditIncident = () => {
           type="text"
           name="incidentTypeOther"
           value={form.incidentTypeOther}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, incidentTypeOther: event.target.value })}
         />
         <br />
 
@@ -138,7 +138,7 @@ const EditIncident = () => {
           type="text"
           name="location"
           value={form.location}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, location: event.target.value })}
         />
         <br />
         <label htmlFor="date">Date:</label>
@@ -146,7 +146,7 @@ const EditIncident = () => {
           type="date"
           name="date"
           value={form.date}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, date: event.target.value })}
         />
         <br />
 
@@ -155,7 +155,7 @@ const EditIncident = () => {
           type="number"
           name="employeeID"
           value={form.employeeID}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, employeeID: event.target.value })}
         />
         <br />
 
@@ -164,7 +164,7 @@ const EditIncident = () => {
           type="text"
           name="firstNameParticipant"
           value={form.firstNameParticipant}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, firstNameParticipant: event.target.value })}
         />
         <br />
 
@@ -173,16 +173,15 @@ const EditIncident = () => {
           type="text"
           name="lastNameParticipant"
           value={form.lastNameParticipant}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, lastNameParticipant: event.target.value })}
         />
         <br />
-
         <label htmlFor="firstNameReport">First Name (Report):</label>
         <input
           type="text"
           name="firstNameReport"
           value={form.firstNameReport}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, firstNameReport: event.target.value })}
         />
         <br />
 
@@ -191,7 +190,7 @@ const EditIncident = () => {
           type="text"
           name="lastNameReport"
           value={form.lastNameReport}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, lastNameReport: event.target.value })}
         />
         <br />
 
@@ -200,7 +199,7 @@ const EditIncident = () => {
           type="text"
           name="contactReportNumber"
           value={form.contactReportNumber}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, contactReportNumber: event.target.value })}
         />
         <br />
 
@@ -209,7 +208,7 @@ const EditIncident = () => {
           type="email"
           name="contactReportEmail"
           value={form.contactReportEmail}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, contactReportEmail: event.target.value })}
         />
         <br />
 
@@ -218,7 +217,7 @@ const EditIncident = () => {
           type="text"
           name="firstNameManager"
           value={form.firstNameManager}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, firstNameManager: event.target.value })}
         />
         <br />
 
@@ -227,7 +226,7 @@ const EditIncident = () => {
           type="text"
           name="lastNameManager"
           value={form.lastNameManager}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, lastNameManager: event.target.value })}
         />
         <br />
 
@@ -236,7 +235,7 @@ const EditIncident = () => {
           type="text"
           name="phoneNumberManager"
           value={form.phoneNumberManager}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, phoneNumberManager: event.target.value })}
         />
         <br />
 
@@ -245,7 +244,7 @@ const EditIncident = () => {
           type="email"
           name="emailAddressManager"
           value={form.emailAddressManager}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, emailAddressManager: event.target.value })}
         />
         <br />
 
@@ -254,7 +253,7 @@ const EditIncident = () => {
           type="text"
           name="signed"
           value={form.signed}
-          onChange={setForm}
+          onChange={(event) => setForm({ ...form, signed: event.target.value })}
         />
         <br />
 
