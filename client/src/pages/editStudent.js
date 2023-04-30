@@ -5,6 +5,7 @@ import axios from 'axios';
 const EditStudent = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
     studentID: '',
     name: '',
@@ -64,6 +65,8 @@ const EditStudent = () => {
       try {
         const res = await axios.get(`http://localhost:3000/students/${id}`);
         const studentData = res.data.student;
+        studentData.enrollmentDate = formatDate(studentData.enrollmentDate);
+        studentData.graduationDate = formatDate(studentData.graduationDate);
         setForm(studentData);
       } catch (error) {
         console.error("Failed to fetch student data:", error);
@@ -93,7 +96,7 @@ const EditStudent = () => {
   
     if (hasErrors) {
       console.error("Form validation errors:", errors);
-      // Display errors to the user, e.g., using an alert or updating the UI
+      setErrors(errors);
     } else {
       const formWithoutCircularReferences = removeCircularReferences(form);
       await axios.put(`http://localhost:3000/students/${id}`, formWithoutCircularReferences);

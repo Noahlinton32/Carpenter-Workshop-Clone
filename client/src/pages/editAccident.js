@@ -100,6 +100,7 @@ const StyledError = styled.div`
 const EditAccident = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [errors, setErrors] = useState({});
       const [form, setForm] = useState({
         accidentReportNumber: '',
         studentID: '',
@@ -120,6 +121,39 @@ const EditAccident = () => {
         const date = new Date(dateString);
         return date.toISOString().split('T')[0];
       };
+      const validateForm = (form) => {
+        const errors = {};
+      
+        for (const key in validationRules) {
+          const rule = validationRules[key];
+          const value = form[key];
+      
+          if (rule.required && (value === null || value === '')) {
+            errors[key] = `${key} is required`;
+          } else if (rule.type && typeof value !== rule.type) {
+            errors[key] = `${key} must be a ${rule.type}`;
+          }
+        }
+      
+        return errors;
+      };
+      const validationRules = {
+        accidentReportNumber: { required: true, type: 'number' },
+        studentID: { required: true, type: 'number' },
+        employeeID: { required: true, type: 'number' },
+        school: { required: true, type: 'string' },
+        room: { required: true, type: 'string' },
+        date: { required: true, type: 'string' },
+        location: { required: true, type: 'string' },
+        employeeIDInvolved: { required: false, type: 'number' },
+        studentIDInvolved: { required: false, type: 'number' },
+        cause: { required: true, type: 'string' },
+        response: { required: true, type: 'string' },
+        preventativeAction: { required: true, type: 'string' },
+        witnesses: { required: false, type: 'string' },
+        signed: { required: true, type: 'string' },
+      };
+
       useEffect(() => {
         const getAccident = async () => {
           try {
@@ -145,15 +179,24 @@ const EditAccident = () => {
           return value;
         }));
       };
-    const handleSubmit = async (event) => {
-      event.preventDefault();
-      const formWithoutCircularReferences = removeCircularReferences(form);
-      await axios.put(`http://localhost:3000/accidents/${id}`, formWithoutCircularReferences);
-      navigate('/accidents');
-    };
-  
+      const handleSubmit = async (event) => {
+        event.preventDefault();
+      
+        const errors = validateForm(form);
+        const hasErrors = Object.keys(errors).length > 0;
+      
+        setErrors(errors); // Add this line to update the errors state
+      
+        if (hasErrors) {
+          console.error("Form validation errors:", errors);
+        } else {
+          const formWithoutCircularReferences = removeCircularReferences(form);
+          await axios.put(`http://localhost:3000/accidents/${id}`, formWithoutCircularReferences);
+          navigate('/accidents');
+        }
+      };
     return (
-      <>
+            <>
       <GlobalStyle/>
       <StyledFormWrapper>
         <StyledForm onSubmit={handleSubmit}>
@@ -169,6 +212,7 @@ const EditAccident = () => {
           name="accidentReportNumber"
           disabled
         />
+        {errors.accidentReportNumber && <StyledError>{errors.accidentReportNumber}</StyledError>}
         </div>
         <div>
           <label htmlFor="studentID">Student ID:</label>
@@ -177,6 +221,7 @@ const EditAccident = () => {
             value={form.studentID}
             name="studentID"
           />
+          {errors.studentID && <StyledError>{errors.studentID}</StyledError>}
         </div>
         </div>
 
@@ -186,6 +231,8 @@ const EditAccident = () => {
           value={form.school}
           name="school"
         />
+        {errors.school && <StyledError>{errors.school}</StyledError>}
+        
         <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '50% 50%' }}>
         <div>
         <label htmlFor="employeeID">Employee ID:</label>
@@ -194,6 +241,7 @@ const EditAccident = () => {
           value={form.employeeID}
           name="employeeID"
         />
+        {errors.employeeID && <StyledError>{errors.employeeID}</StyledError>}
         </div>
         <div>
         <label htmlFor="room">Room:</label>
@@ -202,6 +250,7 @@ const EditAccident = () => {
           value={form.room}
           name="room"
         />
+        {errors.room && <StyledError>{errors.room}</StyledError>}
         </div>
         </div>
         <label htmlFor="date">Date:</label>
@@ -212,6 +261,7 @@ const EditAccident = () => {
           name="date"
           style={{width: '50%'}}
         />
+        {errors.date && <StyledError>{errors.date}</StyledError>}
 
         <label htmlFor="location">Location:</label>
         <StyledInput
@@ -219,6 +269,8 @@ const EditAccident = () => {
           value={form.location}
           name="location"
         />
+        {errors.location && <StyledError>{errors.location}</StyledError>}
+        
         <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '50% 50%' }}>
           <div>
           <label htmlFor="employeeIDInvolved">Staff Involved:</label>
@@ -228,73 +280,40 @@ const EditAccident = () => {
             name="employeeIDInvolved"
             type="number"
           />
-          </div>
-          <div>
-          <label htmlFor="studentIDInvolved">Other Student Involved ID:</label>
-          <StyledInput
-            onChange={(event) => setForm({ ...form, studentIDInvolved: event.target.value })}
-            value={form.studentIDInvolved}
-            name="studentIDInvolved"
-          />
-          </div>
-          </div>
-        <label htmlFor="cause">Cause:</label>
+      {errors.employeeIDInvolved && <StyledError>{errors.employeeIDInvolved}</StyledError>}
+      </div>
+      <div>
+        <label htmlFor="supervisorID">Supervisor ID:</label>
         <StyledInput
-          onChange={(event) => setForm({ ...form, cause: event.target.value })}
-          value={form.cause}
-          name="cause"
+          onChange={(event) => setForm({ ...form, supervisorID: event.target.value })}
+          value={form.supervisorID}
+          name="supervisorID"
+          type="number"
         />
+        {errors.supervisorID && <StyledError>{errors.supervisorID}</StyledError>}
+      </div>
+    </div>
 
-        <label htmlFor="response">Response:</label>
-        <StyledInput
-          onChange={(event) => setForm({ ...form, response: event.target.value })}
-          value={form.response}
-          name="response"
-        />
+    <label htmlFor="description">Description of Accident:</label>
+    <StyledTextArea
+      onChange={(event) => setForm({ ...form, description: event.target.value })}
+      value={form.description}
+      name="description"
+    />
+    {errors.description && <StyledError>{errors.description}</StyledError>}
 
-        <label htmlFor="preventativeAction">Preventative Action Taken:</label>
-        <StyledInput
-          onChange={(event) => setForm({ ...form, preventativeAction: event.target.value })}
-          value={form.preventativeAction}
-          name="preventativeAction"
-        />
+    <label htmlFor="actionTaken">Action Taken:</label>
+    <StyledTextArea
+      onChange={(event) => setForm({ ...form, actionTaken: event.target.value })}
+      value={form.actionTaken}
+      name="actionTaken"
+    />
+    {errors.actionTaken && <StyledError>{errors.actionTaken}</StyledError>}
 
-        <label htmlFor="witnesses">Witness:</label>
-        <StyledInput
-          onChange={(event) => setForm({ ...form, witnesses: event.target.value })}
-          value={form.witnesses}
-          name="witnesses"
-        />
-
-        <StyledFieldset>
-          <legend>Signed?</legend>
-          <label>
-            <input
-              type="radio"
-              value="Yes"
-              name="signed"
-              checked={form.signed === "Yes"}
-              onChange={(event) => setForm({ ...form, signed: event.target.value })}
-            />
-            Yes
-          </label>
-          <label>
-            <input
-              type="radio"
-              value="No"
-              name="signed"
-              checked={form.signed === "No"}
-              onChange={(event) => setForm({ ...form, signed: event.target.value })}
-            />
-            No
-          </label>
-        </StyledFieldset>
-
-      
-        <StyledButton type="submit">Update Accident</StyledButton>
-      </StyledForm>
-      </StyledFormWrapper>
-      </>
+    <StyledButton type="submit">Update</StyledButton>
+  </StyledForm>
+  </StyledFormWrapper>
+</>
     );
     };
   export default EditAccident;
