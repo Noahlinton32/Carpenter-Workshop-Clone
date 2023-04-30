@@ -2,6 +2,113 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+import styled, {createGlobalStyle, css} from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  html{
+    height: 100%;
+
+  }
+
+  body{
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(to top, #d1913c, #ffd194);
+    background-attachment: fixed;
+    height: 100%;
+    margin: 0;
+    color: 555;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+`
+const sharedStyles = css`
+  background-color: #eee;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  margin: 10px 0 20px 0;
+  padding: 20px;
+  box-sizing: border-box;
+` 
+
+const StyledFormWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2%;
+  height: 100%;
+  padding: 0 20px;
+  padding-bottom: 2%;
+
+`
+const StyledForm = styled.form`
+  width: 100%;
+  max-width: 1000px;
+  padding: 40px; 
+  background-color: #fff;
+  border-radius: 10px;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.2);
+`
+
+const StyledInput = styled.input`
+  display: block;
+  width: 100%;
+  ${sharedStyles}
+
+`
+const StyledTextArea = styled.textarea`
+  background-color: #eee;
+  width: 100%;
+  min-height: 100px;
+  resize: none;
+  ${sharedStyles}
+`
+
+const StyledButton = styled.button`
+  display: block;
+  background-color: #D1913C;
+  color: #fff;
+  font-size: .9rem;
+  border: 0;
+  border-radius: 5px;
+  height: 40px;
+  padding: 0 20px;
+  cursor: pointer;
+  boz-sizing: border-box;
+
+`
+
+const StyledFieldset = styled.fieldset`
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 20px 0;
+  
+  legend{
+    padding: 0 10px;
+  }
+
+  label{
+    padding-right: 20px;
+  }
+
+  input{
+    margin-right: 10px;
+  }
+  `
+const StyledError = styled.div`
+  color: red;
+  font-weight: 800;
+  margin: 0 0 40px 0;
+`
+
+
+
+
 const EditIncident = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -124,23 +231,27 @@ const EditIncident = () => {
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
   return (
-    <div>
+    <>
+    <GlobalStyle/>
+    <StyledFormWrapper>
+      
+      <StyledForm onSubmit={handleSubmit}>
       <h1>Edit Incident</h1>
-      <form onSubmit={handleSubmit}>
         <label htmlFor="incidentReportNumber">Incident Report Number</label>
-        <input
+        <StyledInput
           type="number"
           id="incidentReportNumber"
           name="incidentReportNumber"
           value={form.incidentReportNumber}
           onChange={handleChange}
+          disabled
         />
         {errors.incidentReportNumber && (
           <p className="error">{errors.incidentReportNumber}</p>
         )}
 
         <label htmlFor="studentID">Student ID</label>
-        <input
+        <StyledInput
           type="number"
           id="studentID"
           name="studentID"
@@ -150,7 +261,7 @@ const EditIncident = () => {
         {errors.studentID && <p className="error">{errors.studentID}</p>}
 
         <label htmlFor="agencyOrProgram">Agency or Program</label>
-        <input
+        <StyledInput
           type="text"
           id="agencyOrProgram"
           name="agencyOrProgram"
@@ -162,7 +273,7 @@ const EditIncident = () => {
         )}
 
         <label htmlFor="contactNumber">Contact Number</label>
-        <input
+        <StyledInput
           type="number"
           id="contactNumber"
           name="contactNumber"
@@ -174,7 +285,7 @@ const EditIncident = () => {
         )}
 
         <label htmlFor="address">Address</label>
-        <input
+        <StyledInput
           type="text"
           id="address"
           name="address"
@@ -183,20 +294,57 @@ const EditIncident = () => {
         />
         {errors.address && <p className="error">{errors.address}</p>}
 
-        <label htmlFor="incidentType">Incident Type</label>
-        <input
-          type="text"
+
+        <StyledFieldset
           id="incidentType"
           name="incidentType"
           value={form.incidentType}
           onChange={handleChange}
-        />
+        >
+          <legend>Incident Type</legend>
+                <label>
+                  <input type="radio" value="Media Coverage" name="incident" />
+                  Media Coverage
+                </label>
+                <label>
+                  <input type="radio" value="Program Awards" name="incident" />
+                  Program Awards
+                </label>
+                <label>
+                  <input type="radio" value="Injury to Participant" name="incident" />
+                  Injury to Participant
+                </label>
+                <label>
+                  <input type="radio" value="Illness" name="incident" />
+                  Illness                  
+                </label>
+                <label>
+                  <input type="radio" value="Missing Participants" name="incident" />
+                  Missing Participants
+                </label>
+                <label>
+                  <input type="radio" value="Notable Participant Achievements" name="incident" />
+                  Notable Participant Achievements
+                </label>
+                <label>
+                  <input type="radio" value="Auto Accident" name="incident" />
+                  Auto Accident
+                </label>
+                <label>
+                  <input type="radio" value="Injury to Employee" name="incident" />
+                  Injury to Employee
+                </label>
+                <label>
+                  <input type="radio" value="Behavior Requiring Disciplinary Action" name="incident" />
+                  Behavior Requiring Disciplinary Action
+                </label>
+            </StyledFieldset>
         {errors.incidentType && (
           <p className="error">{errors.incidentType}</p>
         )}
 
         <label htmlFor="incidentTypeOther">Incident Type (Other)</label>
-        <input
+        <StyledInput
           type="text"
           id="incidentTypeOther"
           name="incidentTypeOther"
@@ -208,7 +356,7 @@ const EditIncident = () => {
         )}
 
         <label htmlFor="location">Location</label>
-        <input
+        <StyledInput
           type="text"
           id="location"
           name="location"
@@ -218,7 +366,7 @@ const EditIncident = () => {
         {errors.location && <p className="error">{errors.location}</p>}
 
         <label htmlFor="date">Date</label>
-        <input
+        <StyledInput
           type="date"
           id="date"
           name="date"
@@ -227,7 +375,7 @@ const EditIncident = () => {
         />
         {errors.date && <p className="error">{errors.date}</p>}
         <label htmlFor="employeeID">Employee ID</label>
-        <input
+        <StyledInput
           type="number"
           id="employeeID"
           name="employeeID"
@@ -237,7 +385,7 @@ const EditIncident = () => {
         {errors.employeeID && <p className="error">{errors.employeeID}</p>}
 
         <label htmlFor="firstNameParticipant">First Name (Participant)</label>
-        <input
+        <StyledInput
           type="text"
           id="firstNameParticipant"
           name="firstNameParticipant"
@@ -249,7 +397,7 @@ const EditIncident = () => {
         )}
 
         <label htmlFor="lastNameParticipant">Last Name (Participant)</label>
-        <input
+        <StyledInput
           type="text"
           id="lastNameParticipant"
           name="lastNameParticipant"
@@ -261,7 +409,7 @@ const EditIncident = () => {
         )}
 
         <label htmlFor="firstNameReport">First Name (Report)</label>
-        <input
+        <StyledInput
           type="text"
           id="firstNameReport"
           name="firstNameReport"
@@ -273,7 +421,7 @@ const EditIncident = () => {
         )}
 
         <label htmlFor="lastNameReport">Last Name (Report)</label>
-        <input
+        <StyledInput
           type="text"
           id="lastNameReport"
           name="lastNameReport"
@@ -285,7 +433,7 @@ const EditIncident = () => {
         )}
 
         <label htmlFor="contactReportNumber">Contact Report Number</label>
-        <input
+        <StyledInput
           type="number"
           id="contactReportNumber"
           name="contactReportNumber"
@@ -297,7 +445,7 @@ const EditIncident = () => {
         )}
 
         <label htmlFor="contactReportEmail">Contact Report Email</label>
-        <input
+        <StyledInput
           type="email"
           id="contactReportEmail"
           name="contactReportEmail"
@@ -309,7 +457,7 @@ const EditIncident = () => {
         )}
 
         <label htmlFor="firstNameManager">First Name (Manager)</label>
-        <input
+        <StyledInput
           type="text"
           id="firstNameManager"
           name="firstNameManager"
@@ -321,7 +469,7 @@ const EditIncident = () => {
         )}
 
         <label htmlFor="lastNameManager">Last Name (Manager)</label>
-        <input
+        <StyledInput
           type="text"
           id="lastNameManager"
           name="lastNameManager"
@@ -333,7 +481,7 @@ const EditIncident = () => {
         )}
 
         <label htmlFor="phoneNumberManager">Phone Number (Manager)</label>
-        <input
+        <StyledInput
           type="number"
           id="phoneNumberManager"
           name="phoneNumberManager"
@@ -344,7 +492,7 @@ const EditIncident = () => {
           <p className="error">{errors.phoneNumberManager}</p>
         )}
         <label htmlFor="emailAddressManager">Email Address (Manager)</label>
-        <input
+        <StyledInput
           type="email"
           id="emailAddressManager"
           name="emailAddressManager"
@@ -354,9 +502,7 @@ const EditIncident = () => {
         {errors.emailAddressManager && (
           <p className="error">{errors.emailAddressManager}</p>
         )}
-
-        <label htmlFor="signed">Signed</label>
-        <input
+        <StyledFieldset
           type="checkbox"
           id="signed"
           name="signed"
@@ -364,12 +510,23 @@ const EditIncident = () => {
           onChange={(event) =>
             setForm({ ...form, signed: event.target.checked })
           }
-        />
+        >
+          <legend>Signed?</legend>
+                <label>
+                  <input type="radio" value="Yes" name="signed" />
+                  Yes
+                </label>
+                <label>
+                  <input type="radio" value="No" name="signed" />
+                  No
+                </label>
+            </StyledFieldset>
         {errors.signed && <p className="error">{errors.signed}</p>}
 
-        <button type="submit">Update Incident</button>
-      </form>
-    </div>
+        <StyledButton type="submit">Update Incident</StyledButton>
+      </StyledForm>
+    </StyledFormWrapper>
+    </>
   );
 };
 

@@ -58,6 +58,11 @@ const StyledInput = styled.input`
   ${sharedStyles}
 `
 const StyledTextArea = styled.textarea`
+  background-color: #eee;
+  width: 100%;
+  min-height: 100px;
+  resize: none;
+  ${sharedStyles}
 `
 
 const StyledButton = styled.button`
