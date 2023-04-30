@@ -1,4 +1,4 @@
-import {React, useEffect} from 'react';
+import {React, useEffect, useState} from 'react';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Students from './pages/students';
@@ -20,7 +20,7 @@ import EditIncident from './pages/editIncident';
 import EditReferral from './pages/editReferral';
 import EditStudent from './pages/editStudent';
 import { AuthProvider,useAuth} from './authContext';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 function App() {
 return (
   <>
@@ -132,16 +132,27 @@ return (
     
     </>
 )}
-// RequireAuth component to protect routes that require authentication
 function RequireAdmin({ children }) {
   const auth = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isAllowed, setIsAllowed] = useState(false);
 
-  if (!auth.user || !auth.user.isAdmin) {
-    return <Navigate to="/" state={{ from: location }} replace />;
-  }
+  useEffect(() => {
+    if (!auth.user) {
+      // If the user is not authenticated, redirect them to the login page
+      navigate("/", { state: { from: location } });
+    } else if (!auth.user.isAdmin) {
+      // If the user is not an admin, redirect them to the dashboard
+      navigate("/dashboard", { state: { from: location } });
+    } else {
+      // If the user is an admin, set isAllowed to true
+      setIsAllowed(true);
+    }
+  }, [auth.user, navigate, location]);
 
-  return children;
+  // Render the protected route only if the user is allowed (i.e., an admin)
+  return isAllowed ? children : null;
 }
 function RequireAuth({ children }) {
   const auth = useAuth();
