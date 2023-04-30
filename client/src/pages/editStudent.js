@@ -24,6 +24,54 @@ const EditStudent = () => {
     const date = new Date(dateString);
     return date.toISOString().split('T')[0];
   };
+  const validateForm = (form) => {
+    const errors = {};
+  
+    for (const key in validationRules) {
+      const rule = validationRules[key];
+      const value = form[key];
+  
+      if (rule.required && (value === null || value === '')) {
+        errors[key] = `${key} is required`;
+      } else if (rule.type && typeof value !== rule.type) {
+        errors[key] = `${key} must be a ${rule.type}`;
+      } else if (rule.min !== undefined && value < rule.min) {
+        errors[key] = `${key} must be at least ${rule.min}`;
+      } else if (rule.max !== undefined && value > rule.max) {
+        errors[key] = `${key} must be at most ${rule.max}`;
+      }
+    }
+  
+    return errors;
+  };
+  const validationRules = {
+    studentID: { required: true, type: 'number' },
+    name: { required: true, type: 'string' },
+    address: { required: true, type: 'string' },
+    gpa: { required: true, type: 'number', min: 0, max: 4 },
+    grade: { required: true, type: 'string' },
+    firstNameFirstGuardian: { required: false, type: 'string' },
+    lastNameFirstGuardian: { required: false, type: 'string' },
+    firstNameSecondGuardian: { required: false, type: 'string' },
+    lastNameSecondGuardian: { required: false, type: 'string' },
+    emergencyNumber: { required: true, type: 'number' },
+    enrollmentDate: { required: true, type: 'string' },
+    graduationDate: { required: true, type: 'string' },
+    isActive: { required: true, type: 'number', min: 0, max: 1 },
+  };
+ useEffect(() => {
+    const getStudent = async () => {
+      try {
+        const res = await axios.get(`http://localhost:3000/students/${id}`);
+        const studentData = res.data.student;
+        setForm(studentData);
+      } catch (error) {
+        console.error("Failed to fetch student data:", error);
+      }
+    };
+    getStudent();
+  }, [id]);
+
   const removeCircularReferences = (obj) => {
     const seen = new WeakSet();
     return JSON.parse(JSON.stringify(obj, (key, value) => {
@@ -36,159 +84,147 @@ const EditStudent = () => {
       return value;
     }));
   };
-  useEffect(() => {
-    const getStudent = async (event) => {
-      try {
-        event.preventDefault();
-        const formWithoutCircularReferences = removeCircularReferences(form);
-        const res = await axios.get(`http://localhost:3000/incidents/${id}`, formWithoutCircularReferences);
-        const StudentData = res.data.incident;
-        StudentData.date = formatDate(StudentData.date);
-        setForm(StudentData);
-      } catch (error) {
-        console.error("Failed to fetch incident data:", error);
-      }
-    };
-    getStudent();
-  }, [id]);
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await axios.put(`http://localhost:3000/incidents/${id}`, form);
-    navigate('/incidents');
+  
+    const errors = validateForm(form);
+    const hasErrors = Object.keys(errors).length > 0;
+  
+    if (hasErrors) {
+      console.error("Form validation errors:", errors);
+      // Display errors to the user, e.g., using an alert or updating the UI
+    } else {
+      const formWithoutCircularReferences = removeCircularReferences(form);
+      await axios.put(`http://localhost:3000/students/${id}`, formWithoutCircularReferences);
+      navigate('/students');
+    }
   };
 
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <h2 style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Create Student</h2>
-          <label htmlFor="studentID">Student ID: </label>
-          <input 
-            onChange={setForm}
-            value={form.studentID} 
-            id="studentID" type={Number} 
-            name="studentID"
-          />
-      
-          <label id="name">Name: </label>
-          <input 
-            type="text"
-            onChange={setForm}
-            value={form.name} 
-            id="name" 
-            name="name"
-          />
-               
-          <label htmlFor="address" id="address">Address: </label>
-          <input 
-            onChange={setForm}
-            value={form.address}
-            id="address" 
-            name="address"
-            />
-         <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '1fr 1fr' }}>
-          <div>
-          <label htmlFor="gpa" id="gpa">GPA: </label>
-          <input
-            onChange={setForm} 
-            value={form.gpa}
-            id="gpa" 
-            type={Number} 
-            name="gpa"
-            style={{width: '100%',
-            backgroundColor: '#eee',
-            height: '40px',
-            borderRadius: '5px',
-            border: '1px solid #ddd',
-            margin: '10px 0 20px 0',
-            padding: '20px',
-            boxSizing: 'border-box'}}
-            />
-        </div>
-        <div>
-          <label htmlFor="grade" id="grade">Grade: </label>
-          <input
-            onChange={setForm} 
-            value={form.grade}
-            id="grade" 
-            name="grade"
-            style={{width: '100%',
-            backgroundColor: '#eee',
-            height: '40px',
-            borderRadius: '5px',
-            border: '1px solid #ddd',
-            margin: '10px 0 20px 0',
-            padding: '20px',
-            boxSizing: 'border-box'}}
-            />
-        </div>
-          </div>
-           
-          <label htmlFor="firstNameFirstGuardian" id="firstNameFirstGuardian">First Name 1st Guardian: </label>     
-          <input
-            onChange={setForm} 
-            value={form.firstNameFirstGuardian}
-            id="firstNameFirstGuardian" 
-            name="firstNameFirstGuardian"
-            />
-       
-          <label htmlFor="lastNameFirstGuardian" id="lastNameFirstGuardian">Last Name 1st Guardian: </label>
-          <input
-            onChange={setForm} 
-            value={form.lastNameFirstGuardian}
-            id="lastNameFirstGuardian" 
-            name="lastNameFirstGuardian"
-            />
+  <form onSubmit={handleSubmit}>
+  <h2 style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Create Student</h2>
+  <label htmlFor="studentID">Student ID: </label>
+  <input 
+    type="number"
+    name="studentID"
+    value={form.studentID || ''}
+    onChange={(e) => setForm({ ...form, studentID: parseInt(e.target.value) })}
+  />
 
-          <label htmlFor="firstNameSecondGuardian" id="firstNameSecondGuardian">First Name 2nd Guardian: </label>
-          <input
-            onChange={setForm} 
-            value={form.firstNameSecondGuardian}
-            id="firstNameSecondGuardian" 
-            name="firstNameSecondGuardian"
-            />
-  
-          <label htmlFor="lastNameSecondGuardian" id="lastNameSecondGuardian">Last Name 2nd Guardian: </label>
-          <input
-            onChange={setForm} 
-            value={form.lastNameSecondGuardian}
-            id="lastNameSecondGuardian" 
-            name="lastNameSecondGuardian"
-            />
-         
-          <label htmlFor="emergencyNumber" id="emergencyNumber">Emergency Number: </label>
-          <input
-            onChange={setForm} 
-            value={form.emergencyNumber}
-            id="emergencyNumber" 
-            type={Number} 
-            name="emergencyNumber"
-            />
-          
-          <label htmlFor="enrollmentDate" id="enrollmentDate">Enrollment Date: </label>
-          <input
-            onChange={setForm} 
-            value={form.enrollmentDate}
-            id="enrollmentDate" 
-            type="Date" 
-            name="enrollmentDate"/>
-          
-          <label htmlFor="graduationDate" id="graduationDate">Grad date: </label>
-          <input
-            onChange={setForm} 
-            value={form.graduationDate}
-            id="graduationDate" 
-            type="Date" 
-            name="graduationDate"
-            />
-          
-          <input value="1" type={"hidden"} name="isActive"/>
-          
-          
-          <button type="submit">Create Student</button>
-  </form>
+  <label id="name">Name: </label>
+  <input 
+    type="text"
+    name="name"
+    value={form.name || ''}
+    onChange={(e) => setForm({ ...form, name: e.target.value })}
+  />
+
+  <label htmlFor="address" id="address">Address: </label>
+  <input 
+    name="address"
+    value={form.address || ''}
+    onChange={(e) => setForm({ ...form, address: e.target.value })}
+  />
+
+  <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '1fr 1fr' }}>
+    <div>
+      <label htmlFor="gpa" id="gpa">GPA: </label>
+      <input
+        type="number"
+        name="gpa"
+        value={form.gpa || ''}
+        onChange={(e) => setForm({ ...form, gpa: parseFloat(e.target.value) })}
+        style={{
+          width: '100%',
+          backgroundColor: '#eee',
+          height: '40px',
+          borderRadius: '5px',
+          border: '1px solid #ddd',
+          margin: '10px 0 20px 0',
+          padding: '20px',
+          boxSizing: 'border-box'
+        }}
+      />
+    </div>
+    <div>
+      <label htmlFor="grade" id="grade">Grade: </label>
+      <input
+        name="grade"
+        value={form.grade || ''}
+        onChange={(e) => setForm({ ...form, grade: e.target.value })}
+        style={{
+          width: '100%',
+          backgroundColor: '#eee',
+          height: '40px',
+          borderRadius: '5px',
+          border: '1px solid #ddd',
+          margin: '10px 0 20px 0',
+          padding: '20px',
+          boxSizing: 'border-box'
+        }}
+      />
+    </div>
+  </div>
+      
+    <label htmlFor="firstNameFirstGuardian" id="firstNameFirstGuardian">First Name 1st Guardian: </label>
+    <input
+      name="firstNameFirstGuardian"
+      value={form.firstNameFirstGuardian || ''}
+      onChange={(e) => setForm({ ...form, firstNameFirstGuardian: e.target.value })}
+    />
+
+    <label htmlFor="lastNameFirstGuardian" id="lastNameFirstGuardian">Last Name 1st Guardian: </label>
+    <input
+      name="lastNameFirstGuardian"
+      value={form.lastNameFirstGuardian || ''}
+      onChange={(e) => setForm({ ...form, lastNameFirstGuardian: e.target.value })}
+    />
+
+    <label htmlFor="firstNameSecondGuardian" id="firstNameSecondGuardian">First Name 2nd Guardian: </label>
+    <input
+      name="firstNameSecondGuardian"
+      value={form.firstNameSecondGuardian || ''}
+      onChange={(e) => setForm({ ...form, firstNameSecondGuardian: e.target.value })}
+    />
+
+    <label htmlFor="lastNameSecondGuardian" id="lastNameSecondGuardian">Last Name 2nd Guardian: </label>
+    <input
+      name="lastNameSecondGuardian"
+      value={form.lastNameSecondGuardian || ''}
+      onChange={(e) => setForm({ ...form, lastNameSecondGuardian: e.target.value })}
+    />
+
+    <label htmlFor="emergencyNumber" id="emergencyNumber">Emergency Number: </label>
+    <input
+      type="number"
+      name="emergencyNumber"
+      value={form.emergencyNumber || ''}
+      onChange={(e) => setForm({ ...form, emergencyNumber: parseInt(e.target.value) })}
+    />
+
+    <label htmlFor="enrollmentDate" id="enrollmentDate">Enrollment Date: </label>
+    <input
+      type="date"
+      name="enrollmentDate"
+      value={form.enrollmentDate || ''}
+      onChange={(e) => setForm({ ...form, enrollmentDate: e.target.value })}
+    />
+
+    <label htmlFor="graduationDate" id="graduationDate">Grad date: </label>
+    <input
+      type="date"
+      name="graduationDate"
+      value={form.graduationDate || ''}
+      onChange={(e) => setForm({ ...form, graduationDate: e.target.value })}
+    />
+
+    <input type="hidden" name="isActive" value="1" />
+
+    <button type="submit">Create Student</button>
+    </form>
   </>
   );
 };

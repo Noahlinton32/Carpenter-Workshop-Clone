@@ -35,9 +35,7 @@ function Students() {
 
   //Functions 
   const getStudents = async () => {
-    //get students
     const res = await axios.get('http://localhost:3000/students');
-    //set state
     setStudents(res.data.students);
   };
   
@@ -47,7 +45,7 @@ function Students() {
     <h2>Students</h2>
     <div style={{display: 'grid', marginLeft: '-45%'}}>
     {students && students.map (student => {
-        return <div key={student.id}> 
+        return <div key={student._id}> 
 
 <td>
     {student.isActive === 1 ? 
@@ -81,7 +79,7 @@ function Students() {
     <p>Emergency Number: {student.emergencyNumber}</p>
     <p>Enrollment Date: {student.enrollmentDate.split('T')[0]}</p> 
     <div>
-    <NavLink to="/students/edit">
+    <NavLink to={`/students/edit/${student._id}`}>
     <Button style={{backgroundColor: '#D1913C', color:'#000', border: '0'}}>Edit Student</Button>
     </NavLink>
 

@@ -8,16 +8,6 @@ const getAllStudents = async (req, res)=> {
     res.json({students:students});
 };
 
-const getOneStudent = async (req, res) => {
-    //Get id from URL
-    const studID = req.params.id;
-
-    //Find student by ID
-    const student = await Student.findOne({studentID: studID});
-    //respond with student
-    res.json({student:student});
-};
-
 const createStudent =  async (req, res) => {
     //Get data from req body
     const studentID = req.body.studentID;
@@ -55,31 +45,34 @@ const createStudent =  async (req, res) => {
 };
 
 const updateStudent = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const updatedStudents = await Student.findByIdAndUpdate(id, req.body, {
-          new: true,
-        });
-        res.json({ incident: updatedStudents});
-    } catch (error) {
-      res.status(500).json({ error: "An error occurred while updating the incident." });
-    }
-  };
-  const getStudentById = async (req, res) => {
-    try {
-      const Students = await Student.findById(req.params.id);
-      if (!Students) {
-        return res.status(404).json({ message: 'Student not found' });
+  const id = req.params.id;
+  const updatedStudent = req.body;
+
+  try {
+      const result = await Student.findByIdAndUpdate(id, updatedStudent, { new: true });
+      res.status(200).json({ student: result });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+};
+
+const getStudentById = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+      const student = await Student.findById(id);
+      if (!student) {
+          res.status(404).json({ message: 'Student not found' });
+      } else {
+          res.status(200).json({ student });
       }
-      res.json({ incident });
-    } catch (err) {
-      res.status(500).json({ message: 'Server error' });
-    }
-  };
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
+};
 
 module.exports = {
     getAllStudents: getAllStudents,
-    getOneStudent: getOneStudent,
     createStudent: createStudent,
     updateStudent: updateStudent,
     getStudentById: getStudentById,
