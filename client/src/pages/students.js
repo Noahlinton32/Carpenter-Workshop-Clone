@@ -4,7 +4,6 @@ import {NavLink} from "../components/Navbar/NavbarElements";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from "react-bootstrap";
 import styled, {createGlobalStyle, css} from 'styled-components';
-import Collapsible from 'react-collapsible';
 import { MDBDataTable } from 'mdbreact';
 
 const GlobalStyle = createGlobalStyle`

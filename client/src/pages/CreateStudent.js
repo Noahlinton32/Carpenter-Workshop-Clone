@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import styled, {createGlobalStyle, css} from 'styled-components';
 import axios from "axios";
-import { FaBorderStyle } from "react-icons/fa";
 
 
 const GlobalStyle = createGlobalStyle`
