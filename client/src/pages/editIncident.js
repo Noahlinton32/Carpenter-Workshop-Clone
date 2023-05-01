@@ -114,27 +114,27 @@ const EditIncident = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
-    incidentReportNumber: '',
-    studentID: '',
+    incidentReportNumber: 0,
+    studentID: 0,
     agencyOrProgram: '',
-    contactNumber: '',
+    contactNumber: 0,
     address: '',
     incidentType: '',
     incidentTypeOther: '',
     location: '',
     date: '',
-    employeeID: '',
+    employeeID: 0,
     firstNameParticipant: '',
     lastNameParticipant: '',
     firstNameReport: '',
     lastNameReport: '',
-    contactReportNumber: '',
+    contactReportNumber: 0,
     contactReportEmail: '',
     firstNameManager: '',
     lastNameManager: '',
-    phoneNumberManager: '',
+    phoneNumberManager: 0,
     emailAddressManager: '',
-    signed: '',
+    signed: 0,
   });
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -228,7 +228,8 @@ const EditIncident = () => {
   
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setForm((prevForm) => ({ ...prevForm, [name]: value }));
+    const convertedValue = validationRules[name].type === 'number' && !isNaN(parseFloat(value)) ? parseFloat(value) : value;
+    setForm((prevForm) => ({ ...prevForm, [name]: convertedValue }));
   };
   return (
     <>
@@ -295,53 +296,108 @@ const EditIncident = () => {
         {errors.address && <p className="error">{errors.address}</p>}
 
 
+
         <StyledFieldset
-          id="incidentType"
-          name="incidentType"
-          value={form.incidentType}
-          onChange={handleChange}
-        >
-          <legend>Incident Type</legend>
-                <label>
-                  <input type="radio" value="Media Coverage" name="incident" />
-                  Media Coverage
-                </label>
-                <label>
-                  <input type="radio" value="Program Awards" name="incident" />
-                  Program Awards
-                </label>
-                <label>
-                  <input type="radio" value="Injury to Participant" name="incident" />
-                  Injury to Participant
-                </label>
-                <label>
-                  <input type="radio" value="Illness" name="incident" />
-                  Illness                  
-                </label>
-                <label>
-                  <input type="radio" value="Missing Participants" name="incident" />
-                  Missing Participants
-                </label>
-                <label>
-                  <input type="radio" value="Notable Participant Achievements" name="incident" />
-                  Notable Participant Achievements
-                </label>
-                <label>
-                  <input type="radio" value="Auto Accident" name="incident" />
-                  Auto Accident
-                </label>
-                <label>
-                  <input type="radio" value="Injury to Employee" name="incident" />
-                  Injury to Employee
-                </label>
-                <label>
-                  <input type="radio" value="Behavior Requiring Disciplinary Action" name="incident" />
-                  Behavior Requiring Disciplinary Action
-                </label>
-            </StyledFieldset>
-        {errors.incidentType && (
-          <p className="error">{errors.incidentType}</p>
-        )}
+        id="incidentType"
+        name="incidentType"
+        value={form.incidentType}
+        onChange={handleChange}
+      >
+        <legend>Incident Type</legend>
+        <label>
+          <input
+            type="radio"
+            value="Media Coverage"
+            name="incidentType"
+            checked={form.incidentType === "Media Coverage"}
+            onChange={handleChange}
+          />
+          Media Coverage
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="Program Awards"
+            name="incidentType"
+            checked={form.incidentType === "Program Awards"}
+            onChange={handleChange}
+          />
+          Program Awards
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="Injury to Participant"
+            name="incidentType"
+            checked={form.incidentType === "Injury to Participant"}
+            onChange={handleChange}
+          />
+          Injury to Participant
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="Illness"
+            name="incidentType"
+            checked={form.incidentType === "Illness"}
+            onChange={handleChange}
+          />
+          Illness
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="Missing Participants"
+            name="incidentType"
+            checked={form.incidentType === "Missing Participants"}
+            onChange={handleChange}
+          />
+          Missing Participants
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="Notable Participant Achievements"
+            name="incidentType"
+            checked={form.incidentType === "Notable Participant Achievements"}
+            onChange={handleChange}
+          />
+          Notable Participant Achievements
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="Auto Accident"
+            name="incidentType"
+            checked={form.incidentType === "Auto Accident"}
+            onChange={handleChange}
+          />
+          Auto Accident
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="Injury to Employee"
+            name="incidentType"
+            checked={form.incidentType === "Injury to Employee"}
+            onChange={handleChange}
+          />
+          Injury to Employee
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="Behavior Requiring Disciplinary Action"
+            name="incidentType"
+            checked={form.incidentType === "Behavior Requiring Disciplinary Action"}
+            onChange={handleChange}
+          />
+          Behavior Requiring Disciplinary Action
+        </label>
+      </StyledFieldset>
+      {errors.incidentType && (
+        <p className="error">{errors.incidentType}</p>
+      )}
 
         <label htmlFor="incidentTypeOther">Incident Type (Other)</label>
         <StyledInput

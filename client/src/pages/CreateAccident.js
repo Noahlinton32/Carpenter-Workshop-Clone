@@ -103,214 +103,233 @@ const StyledError = styled.div`
 `
 
 function CreateAccidents() {
-  // State
   const [accidents, SetAccidents] = useState(null);
-  const [error, setError] = useState('');
-  const [createForm, SetCreateForm] = useState({
-    accidentReportNumber: '',
-    studentID: '',
-    school: '',
-    employeeID: '', 
-    room: '', 
-    date: '',
-    location: '', 
-    employeeIDInvolved: '', 
-    studentIDInvolved: '',
-    cause: '',
-    response: '',
-    preventativeAction: '', 
-    witnesses: '',
-    signed: ''
+  const [errors, setErrors] = useState({});
+  const [generatedReportNumber, setGeneratedReportNumber] = useState("");
+  const [form, setForm] = useState({
+    accidentReportNumber: "",
+    studentID: "",
+    school: "",
+    employeeID: "",
+    room: "",
+    date: "",
+    location: "",
+    employeeIDInvolved: "",
+    studentIDInvolved: "",
+    cause: "",
+    response: "",
+    preventativeAction: "",
+    witnesses: "",
+    signed: "",
   });
 
-  //User Effect
-  useEffect (() => {
+  const validationRules = {
+    accidentReportNumber: { required: true, type: "number" },
+    studentID: { required: true, type: "number" },
+    school: { required: true, type: "string" },
+    employeeID: { required: true, type: "number" },
+    room: { required: true, type: "string" },
+    date: { required: true, type: "string" },
+    location: { required: true, type: "string" },
+    employeeIDInvolved: { required: false, type: "number" },
+    studentIDInvolved: { required: false, type: "number" },
+    cause: { required: true, type: "string" },
+    response: { required: true, type: "string" },
+    preventativeAction: { required: true, type: "string" },
+    witnesses: { required: false, type: "string" },
+    signed: { required: true, type: "string" },
+  };
+
+  const validateForm = (form) => {
+    const errors = {};
+
+    for (const key in validationRules) {
+      const rule = validationRules[key];
+      const value = form[key];
+
+      if (rule.required && (value === null || value === "")) {
+        errors[key] = `${key} is required`;
+      } else if (rule.type && typeof value !== rule.type) {
+        errors[key] = `${key} must be a ${rule.type}`;
+      }
+    }
+
+    return errors;
+  };
+
+  const generateAccidentReportNumber = async () => {
+    let unique = false;
+    let accidentReportNumber;
+
+    while (!unique) {
+      accidentReportNumber = "A" + Math.floor(Math.random() * 1000000);
+      const res = await axios.get(`http://localhost:3000/accidents/${accidentReportNumber}`);
+      if (!res.data.accident) {
+        unique = true;
+      }
+    }
+    setGeneratedReportNumber(accidentReportNumber);
+  };
+
+  useEffect(() => {
     getAccidents();
+    (async () => {
+      const accidentReportNumber = await generateAccidentReportNumber();
+      setForm({
+        ...form,
+        accidentReportNumber,
+      });
+    })();
   }, []);
 
-  //Functions 
+  // Functions
   const getAccidents = async () => {
-    //get students
-    const res = await axios.get('http://localhost:3000/accidents');
-    //set state
+    // get students
+    const res = await axios.get("http://localhost:3000/accidents");
+    // set state
     SetAccidents(res.data.accidents);
   };
 
-  const UpdateCreateFormField = (e) => {
-    const {name, value} = e.target;
-
-    SetCreateForm({
-      ...createForm,
-      [name]: value,
-
-    })
-
-  };
-
-  const CreateAccident = async (e) => {
-    e.preventDefault();
-
-    //Check errors here
-
-
-    // Create the student
-    const res = await axios.post("http://localhost:3000/accidents", createForm);
-    //Update state
-    console.log(res);
-    SetAccidents([...accidents, res.data.accident]);
-
-    //Clear form state
-    SetCreateForm({
-        accidentReportNumber: '',
-        studentID: '',
-        school: '',
-        employeeID: '', 
-        room: '', 
-        date: '',
-        location: '', 
-        employeeIDInvolved: '', 
-        studentIDInvolved: '',
-        cause: '',
-        response: '',
-        preventativeAction: '', 
-        witnesses: '',
-        signed: ''
-    })
-    
+  function handleChange(e) {
+    setForm({ ...form, [e.target.name]: e.target.value });
   }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      const response = await axios.post("/api/accidents", form);
+      if (response.status === 201) {
+        SetAccidents([...accidents, response.data]);
+        setErrors('');
+      } else {
+        setErrors('Error creating accident report. Please try again.');
+      }
+    } catch (error) {
+      setErrors(`Error: ${error.message}`);
+    }
+  }
+
   
   return( 
-  <>
-  <GlobalStyle/>
-    <StyledFormWrapper>
-      <StyledForm onSubmit={CreateAccident}>
-        <h2 style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Create Accident</h2>
-        <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '1fr 1fr' }}>
+<>
+  <GlobalStyle />
+  <StyledFormWrapper>
+    <StyledForm onSubmit={handleSubmit}>
+      <h2>Edit Accident</h2>
+
+      <div style={{ display: 'grid', gridGap: '10px', gridTemplateColumns: '50% 50%' }}>
         <div>
-          <label htmlFor="accidentReportNumber">Accident Report Number: </label>
-          <StyledInput 
-            onChange={UpdateCreateFormField}
-            value={createForm.accidentReportNumber} 
-            type='Number' 
-            name="accidentReportNumber"
+        <label htmlFor="accidentReportNumber">Accident Report Number:</label>
+            <StyledInput
+              onChange={handleChange}
+              value={generatedReportNumber}
+              type="number"
+              name="accidentReportNumber"
+              disabled
+            />
+        </div>
+        <div>
+          <label htmlFor="studentID">Student ID:</label>
+          <StyledInput
+            onChange={(event) => setForm({ ...form, studentID: event.target.value })}
+            value={form.studentID}
+            name="studentID"
           />
-          </div>
-              <div>
-                <label htmlFor="studentID">Student ID: </label>
-                <StyledInput
-                  onChange={UpdateCreateFormField}
-                  value={createForm.studentID}
-                  name="studentID"
-                />
-              </div>
-              </div>
-          <label htmlFor="school">School: </label>
+          {errors.studentID && <StyledError>{errors.studentID}</StyledError>}
+        </div>
+      </div>
+
+      <label htmlFor="school">School:</label>
+      <StyledInput
+        onChange={(event) => setForm({ ...form, school: event.target.value })}
+        value={form.school}
+        name="school"
+      />
+      {errors.school && <StyledError>{errors.school}</StyledError>}
+
+      <div style={{ display: 'grid', gridGap: '10px', gridTemplateColumns: '50% 50%' }}>
+        <div>
+          <label htmlFor="employeeID">Employee ID:</label>
           <StyledInput
-            onChange={UpdateCreateFormField}
-            value={createForm.school}
-            name="school"
-          />   
-          <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '1fr 1fr' }}>
-             
-           <div>
-            <label htmlFor="employeeID">Employee ID: </label>
-              <StyledInput
-              onChange={UpdateCreateFormField}
-              value={createForm.employeeID}
-              name="employeeID"
-              />
-            </div>
-            <div>  
-          <label htmlFor="room">Room: </label>
+            onChange={(event) => setForm({ ...form, employeeID: event.target.value })}
+            value={form.employeeID}
+            name="employeeID"
+          />
+          {errors.employeeID && <StyledError>{errors.employeeID}</StyledError>}
+        </div>
+        <div>
+          <label htmlFor="room">Room:</label>
           <StyledInput
-            onChange={UpdateCreateFormField}
-            value={createForm.room}
+            onChange={(event) => setForm({ ...form, room: event.target.value })}
+            value={form.room}
             name="room"
           />
+          {errors.room && <StyledError>{errors.room}</StyledError>}
+        </div>
+      </div>
+
+      <label htmlFor="date">Date:</label>
+      <StyledInput
+        onChange={(event) => setForm({ ...form, date: event.target.value })}
+        value={form.date}
+        type="date"
+        name="date"
+        style={{ width: '50%' }}
+      />
+      {errors.date && <StyledError>{errors.date}</StyledError>}
+
+      <label htmlFor="location">Location:</label>
+      <StyledInput
+        onChange={(event) => setForm({ ...form, location: event.target.value })}
+        value={form.location}
+        name="location"
+      />
+      {errors.location && <StyledError>{errors.location}</StyledError>}
+
+      <div style={{ display: 'grid', gridGap: '10px', gridTemplateColumns: '50% 50%' }}>
+        <div>
+          <label htmlFor="employeeIDInvolved">Staff Involved:</label>
+          <StyledInput
+            onChange={(event) => setForm({ ...form, employeeIDInvolved: event.target.value })}
+            value={form.employeeIDInvolved}
+            name="employeeIDInvolved"
+            type="number"
+          />
+          {errors.employeeIDInvolved && <StyledError>{errors.employeeIDInvolved}</StyledError>}
+        </div>
+        <div>
+          <label htmlFor="supervisorID">Supervisor ID:</label>
+          <StyledInput
+              onChange={(event) => setForm({ ...form, supervisorID: event.target.value })}
+              value={form.supervisorID}
+              name="supervisorID"
+              type="number"
+            />
+            {errors.supervisorID && <StyledError>{errors.supervisorID}</StyledError>}
           </div>
-          </div>
-          <label htmlFor="date">Date: </label>
-          <StyledInput
-            onChange={UpdateCreateFormField}
-            value={createForm.date}
-            type="date"
-            name="date"
-            style={{width:'50%'}}
-          />
-          <label htmlFor="location">Location: </label>
-          <StyledInput
-            onChange={UpdateCreateFormField}
-            value={createForm.location}
-            name="location"
-          />
-          <div style={{display: 'grid', gridGap: '10px', gridTemplateColumns: '1fr 1fr' }}>
-              <div>
-                <label htmlFor="employeeIDInvolved">Staff Involved: </label>
-                <StyledInput
-                  onChange={UpdateCreateFormField}
-                  value={createForm.employeeIDInvolved}
-                  name="employeeIDInvolved"
-                  type="Number"
-                />
-              </div>
-              <div>
-              <label htmlFor="studentIDInvolved">Other Student Involved ID: </label>
-                <StyledInput
-                onChange={UpdateCreateFormField}
-                value={createForm.studentIDInvolved}
-                name="studentIDInvolved"
-                />
-              </div>
-            </div>
-          <label htmlFor="cause">Cause: </label>
-          <StyledInput
-            onChange={UpdateCreateFormField}
-            value={createForm.cause}
-            name="cause"
-          />
-          <label htmlFor="response">Response: </label>
-          <StyledInput
-            onChange={UpdateCreateFormField}
-            value={createForm.response}
-            name="response"
-          />
-          <label htmlFor="preventativeAction">preventative Action Taken: </label>
-          <StyledInput
-            onChange={UpdateCreateFormField}
-            value={createForm.preventativeAction}
-            name="preventativeAction"
-          />
-          <label htmlFor="witnesses">Witness: </label>
-          <StyledInput
-            onChange={UpdateCreateFormField}
-            value={createForm.witnesses}
-            name="witnesses"
-          />
-            <StyledFieldset
-                onChange={UpdateCreateFormField}
-                value={createForm.signed}
-                name="signed"
-            >
-              <legend>Signed?</legend>
-                <label>
-                  <input type="radio" value="Yes" name="signed" />
-                  Yes
-                </label>
-                <label>
-                  <input type="radio" value="No" name="signed" />
-                  No
-                </label>
-            </StyledFieldset>
-          {error && (
-            <StyledError>
-            <p>{error}</p>
-            </StyledError>
-            )}
-          
-          <StyledButton type="submit">Create Accident</StyledButton>
-  </StyledForm>
-  </StyledFormWrapper>
-  </>
+        </div>
+    
+        <label htmlFor="description">Description of Accident:</label>
+        <StyledTextArea
+          onChange={(event) => setForm({ ...form, description: event.target.value })}
+          value={form.description}
+          name="description"
+        />
+        {errors.description && <StyledError>{errors.description}</StyledError>}
+    
+        <label htmlFor="actionTaken">Action Taken:</label>
+        <StyledTextArea
+          onChange={(event) => setForm({ ...form, actionTaken: event.target.value })}
+          value={form.actionTaken}
+          name="actionTaken"
+        />
+        {errors.actionTaken && <StyledError>{errors.actionTaken}</StyledError>}
+    
+        <StyledButton type="submit">Create</StyledButton>
+      </StyledForm>
+      {errors.nonFieldErrors && <StyledError>{errors.nonFieldErrors}</StyledError>}
+    </StyledFormWrapper>
+    </>
   );
    
 }

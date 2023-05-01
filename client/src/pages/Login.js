@@ -113,7 +113,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const getLogin = async () => {
     try {
-      const res = await axios.post("http://localhost:3000/login", {
+      const res = await axios.post("${process.env.REACT_APP_API_BASE_URL}/login", {
         username: Login.username,
         password: Login.password,
       });

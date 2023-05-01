@@ -30,15 +30,18 @@ function Students() {
   
   //User Effect
   useEffect (() => {
-    getStudents();
+    fetchStudents();
   }, []);
 
   //Functions 
-  const getStudents = async () => {
+  const fetchStudents = async () => {
     const res = await axios.get('http://localhost:3000/students');
     setStudents(res.data.students);
   };
-  
+  const handleArchiveStudent = async (studentId) => {
+    await axios.delete(`http://localhost:3000/admin/students/${studentId}`);
+    fetchStudents();
+  };
   
   return <div style={{marginLeft: '45%'}}>
     <GlobalStyle/>
@@ -82,7 +85,12 @@ function Students() {
     <NavLink to={`/students/edit/${student._id}`}>
     <Button style={{backgroundColor: '#D1913C', color:'#000', border: '0'}}>Edit Student</Button>
     </NavLink>
-
+    </div> 
+    <div>
+    <Button
+      style={{ backgroundColor: '#c75252', color: '#000', border: '0' }}
+      onClick={() => handleArchiveStudent(student._id)}
+    > Archive Student </Button>
     </div> 
       </div>
   </Collapsible>
