@@ -39,7 +39,7 @@ function Students() {
     setStudents(res.data.students);
   };
   for (let i in students){
-    students[i]['edit']=(<NavLink to={`/students/edit/${students[i]['_id']}`}><button style={{backgroundColor: 'lightblue'}}>Edit</button></NavLink>)
+    students[i]['edit']=(<NavLink to={`/students/edit/${students[i]['_id']}`}><Button style={{backgroundColor: 'lightblue', border: '0'}}>Edit</Button></NavLink>)
     students[i]['guardian']= students[i]['firstNameFirstGuardian']+' '+students[i]['lastNameFirstGuardian']
     students[i]['guardian2']= students[i]['firstNameSecondGuardian']+' '+students[i]['lastNameSecondGuardian']
 
