@@ -1,6 +1,106 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import styled, {createGlobalStyle, css} from 'styled-components';
+
+const GlobalStyle = createGlobalStyle`
+  html{
+    height: 100%;
+
+  }
+
+  body{
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(to top, #d1913c, #ffd194);
+    background-attachment: fixed;
+    height: 100%;
+    margin: 0;
+    color: 555;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+`
+const sharedStyles = css`
+  background-color: #eee;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  margin: 10px 0 20px 0;
+  padding: 20px;
+  box-sizing: border-box;
+` 
+
+const StyledFormWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2%;
+  height: 100%;
+  padding: 0 20px;
+  padding-bottom: 2%;
+
+`
+const StyledForm = styled.form`
+  width: 100%;
+  max-width: 1000px;
+  padding: 40px; 
+  background-color: #fff;
+  border-radius: 10px;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.2);
+`
+
+const StyledInput = styled.input`
+  display: block;
+  width: 100%;
+  ${sharedStyles}
+
+`
+const StyledTextArea = styled.textarea`
+
+`
+
+const StyledButton = styled.button`
+  display: block;
+  background-color: #D1913C;
+  color: #fff;
+  font-size: .9rem;
+  border: 0;
+  border-radius: 5px;
+  height: 40px;
+  padding: 0 20px;
+  cursor: pointer;
+  boz-sizing: border-box;
+
+`
+
+const StyledFieldset = styled.fieldset`
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 20px 0;
+  
+  legend{
+    padding: 0 10px;
+  }
+
+  label{
+    padding-right: 20px;
+  }
+
+  input{
+    margin-right: 10px;
+  }
+  `
+const StyledError = styled.div`
+  color: red;
+  font-weight: 800;
+  margin: 0 0 40px 0;
+`
+
 
 const EditReferral = () => {
   const { id } = useParams();
@@ -99,23 +199,27 @@ const EditReferral = () => {
     }
   };
   return (
-    <div>
-      <h1>Edit Referral</h1>
-      <form onSubmit={handleSubmit}>
+    <>
+    <GlobalStyle/>
+    <StyledFormWrapper>
+
+      <StyledForm onSubmit={handleSubmit}>
+      <h2 style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>Edit Referral</h2>
       <label htmlFor="referralNumber">Referral Number: </label>
-    <input
+    <StyledInput
       type="number"
       id="referralNumber"
       name="referralNumber"
       value={form.referralNumber}
       onChange={handleChange}
+      disabled
     />
     {errors.referralNumber && (
       <p className="error">{errors.referralNumber}</p>
     )}
 
     <label htmlFor="studentID">Student ID: </label>
-    <input
+    <StyledInput
       type="number"
       id="studentID"
       name="studentID"
@@ -125,7 +229,7 @@ const EditReferral = () => {
     {errors.studentID && <p className="error">{errors.studentID}</p>}
 
     <label htmlFor="studentName">Student Name: </label>
-    <input
+    <StyledInput
       type="text"
       id="studentName"
       name="studentName"
@@ -137,7 +241,7 @@ const EditReferral = () => {
     )}
 
     <label htmlFor="date">Date: </label>
-    <input
+    <StyledInput
       type="date"
       id="date"
       name="date"
@@ -147,7 +251,7 @@ const EditReferral = () => {
     {errors.date && <p className="error">{errors.date}</p>}
 
     <label htmlFor="cause">Cause: </label>
-    <input
+    <StyledInput
       type="text"
       id="cause"
       name="cause"
@@ -157,7 +261,7 @@ const EditReferral = () => {
     {errors.cause && <p className="error">{errors.cause}</p>}
 
     <label htmlFor="action">Action: </label>
-    <input
+    <StyledInput
       type="text"
       id="action"
       name="action"
@@ -167,7 +271,7 @@ const EditReferral = () => {
     {errors.action && <p className="error">{errors.action}</p>}
 
     <label htmlFor="employeeID">Employee ID: </label>
-    <input
+    <StyledInput
       type="number"
       id="employeeID"
       name="employeeID"
@@ -179,7 +283,7 @@ const EditReferral = () => {
     )}
 
     <label htmlFor="parentPhoneNumber">Parent Contact Number: </label>
-    <input
+    <StyledInput
       type="number"
       id="parentPhoneNumber"
       name="parentPhoneNumber"
@@ -190,9 +294,10 @@ const EditReferral = () => {
       <p className="error">{errors.parentPhoneNumber}</p>
     )}
 
-    <button type="submit">Update Referral</button>
-  </form>
-</div>
+    <StyledButton type="submit">Update Referral</StyledButton>
+  </StyledForm>
+  </StyledFormWrapper>
+</>
 
 );
 };

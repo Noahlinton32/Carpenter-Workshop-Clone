@@ -4,7 +4,7 @@ import {NavLink} from "../components/Navbar/NavbarElements";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from "react-bootstrap";
 import styled, {createGlobalStyle, css} from 'styled-components';
-import Collapsible from 'react-collapsible';
+import { MDBDataTable } from 'mdbreact';
 
 const GlobalStyle = createGlobalStyle`
   html{
@@ -42,68 +42,98 @@ function Referrals() {
     }
   };
   
-  return <div style={{marginLeft: '45%'}}>
+  for (let i in referrals){
+    referrals[i]['edit']=(<NavLink to={`/referrals/edit/${referrals[i]['_id']}`}><Button style={{backgroundColor: 'lightblue', border: '0'}}>Edit</Button></NavLink>)
+    referrals[i]['delete']= <Button
+    style={{backgroundColor: 'darkred', border: '0'}}
+    onClick={() => deleteReferral(referrals[i]['_id'])}
+  > Delete </Button>
+    referrals[i]['date']= referrals[i]['date'].split('T')[0]
+    
+  
+  }
+
+  const data = {
+    columns: [
+      {
+        label: 'Referral No.',
+        field: 'referralNumber',
+        sort: 'asc',
+        width: 100
+      },
+      {
+        label: 'Student ID',
+        field: 'studentID',
+        sort: 'asc',
+        width: 200
+      },
+      {
+        label: 'Student',
+        field: 'studentName',
+        sort: 'asc',
+        width: 100
+      },
+      {
+        label: 'Date',
+        field: 'date',
+        sort: 'asc',
+        width: 200
+      },
+      {
+        label: 'Cause',
+        field: 'cause',
+        sort: 'asc',
+        width: 100
+      },
+      {
+        label: 'Action',
+        field: 'action',
+        sort: 'asc',
+        width: 150
+      },
+      {
+        label: 'Employee',
+        field: 'employeeID',
+        sort: 'asc',
+        width: 100
+      },
+      {
+        label: 'Parent Contact',
+        field: 'parentPhoneNumber',
+        sort: 'asc',
+        width: 100
+      },
+      {
+        label: 'Edit',
+        field: 'edit',
+      },
+      {
+        label: 'Delete',
+        field: 'delete',
+      }
+    ],
+    rows: 
+      referrals
+    }
+
+  return <div style={{marginLeft: 'auto'}}>
     <GlobalStyle/>
-    <h2>Referrals</h2>
-    <div style={{display: 'grid', marginLeft: '-45%'}}>
-    {referrals && referrals.map (referral => {
-        return <div key={referral._id}> 
-<td>
-<div style={{backgroundColor: '#fff',
-                display: 'flex',
-                justifyContent: 'center',
-                rowGap: '5px',
-                alignItems: 'center',
-                marginTop: '2%',
-                height: '100%',
-                width: '100%',
-                maxWidth: '1000px',
-                padding: '0 20px',
-                borderRadius: '10px',
-                boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.2)'
-                }}>
-    <Collapsible trigger={<h5>Referral Number: {referral.referralNumber}</h5>} style={{backgroundColor: '#fff'}}>
-      <div style={{
-        display: 'grid',
-        width:'100%',
-        gridTemplateRows: '40px 40px 40px 40px 40px 10px',
-        gridTemplateColumns: '400px 400px',
+    <h2 style={{marginLeft: '50%'}}>Referrals</h2>
+    <div style={{width: '80%', marginLeft:'10%', backgroundColor: '#fff',
+                borderRadius: '10px', padding: '0 20px',boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.2)', minWidth: '650px'}}>
+    <MDBDataTable
+      striped
+      small
+      data={data}
+      noBottomColumns={true} 
+    />
 
 
-      }}>
-    <p>Student ID: {referral.studentID}</p>
-    <p>Student: {referral.studentName}</p>
-    <p>Date: {referral.date.split('T')[0]}</p>
-    <p>Cause: {referral.cause}</p>
-    <p>Action: {referral.action}</p>
-    <p>Employee ID: {referral.employeeID}</p>
-    <p>Parent Contact Number: {referral.parentPhoneNumber}</p>
-    <div></div>
-    <div>
-    <NavLink to={`/referrals/edit/${referral._id}`}>
-    <Button style={{backgroundColor: '#D1913C', color:'#000', border: '0'}}>Edit Referral</Button>
-    </NavLink>
-    </div>
-    <div>
-    <Button
-  onClick={() => deleteReferral(referral._id)}
-  style={{ backgroundColor: "#c75252", color: "#000", border: "0" }}
->
-  Delete Referral
-</Button>
-    </div> 
-      </div>
-  </Collapsible>
-  </div>
-  </td>
-</div>
-    })}
-</div> 
-
-<div style={{marginTop:'5%'}}>
+<div style={{paddingBottom:'20px'}}>
 <NavLink to="/referrals/create" activeStyle>
     <Button>Create Referral</Button>
 </NavLink>
+</div>
 </div>
 </div>     
 }
