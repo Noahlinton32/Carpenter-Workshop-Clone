@@ -125,7 +125,7 @@ function CreateReferrals() {
   //Functions 
   const getReferrals = async () => {
     //get students
-    const res = await axios.get('http://localhost:3000/referrals');
+    const res = await axios.get('https://carpenterservice.onrender.com/referrals');
     //set state
     SetReferrals(res.data.referrals);
   };
@@ -148,7 +148,7 @@ function CreateReferrals() {
 
 
     // Create the student
-    const res = await axios.post("http://localhost:3000/referrals", createForm);
+    const res = await axios.post("https://carpenterservice.onrender.com/referrals", createForm);
     //Update state
     console.log(res);
     SetReferrals([...referrals, res.data.referral]);

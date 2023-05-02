@@ -125,7 +125,7 @@ function CreateStudents() {
   //Functions 
   const getStudents = async () => {
     //get students
-    const res = await axios.get('http://localhost:3000/students');
+    const res = await axios.get('https://carpenterservice.onrender.com/students');
     //set state
     SetStudents(res.data.students);
   };
@@ -201,7 +201,7 @@ function CreateStudents() {
 
 
     // Create the student
-    const res = await axios.post("http://localhost:3000/students", createForm);
+    const res = await axios.post("https://carpenterservice.onrender.com/students", createForm);
     //Update state
     console.log(res);
     SetStudents([...students, res.data.student]);

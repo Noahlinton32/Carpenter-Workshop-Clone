@@ -34,7 +34,7 @@ function Incidents() {
   //Functions 
   const getIncidents = async () => {
     //get incidents
-    const res = await axios.get('http://localhost:3000/incidents');
+    const res = await axios.get('https://carpenterservice.onrender.com/incidents');
     //set state
     setIncidents(res.data.incidents);
   };

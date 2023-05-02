@@ -131,7 +131,7 @@ function CreateAccidents() {
   //Functions 
   const getAccidents = async () => {
     //get students
-    const res = await axios.get('http://localhost:3000/accidents');
+    const res = await axios.get('https://carpenterservice.onrender.com/accidents');
     //set state
     SetAccidents(res.data.accidents);
   };
@@ -154,7 +154,7 @@ function CreateAccidents() {
 
 
     // Create the student
-    const res = await axios.post("http://localhost:3000/accidents", createForm);
+    const res = await axios.post("https://carpenterservice.onrender.com/accidents", createForm);
     //Update state
     console.log(res);
     SetAccidents([...accidents, res.data.accident]);

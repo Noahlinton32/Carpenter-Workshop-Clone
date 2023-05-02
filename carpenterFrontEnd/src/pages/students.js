@@ -36,7 +36,7 @@ function Students() {
   //Functions 
   const getStudents = async () => {
     //get students
-    const res = await axios.get('http://localhost:3000/students');
+    const res = await axios.get('https://carpenterservice.onrender.com/students');
     //set state
     setStudents(res.data.students);
   };
