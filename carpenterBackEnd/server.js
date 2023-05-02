@@ -55,7 +55,7 @@ app.delete('/referrals/:id', referralsController.deleteReferral);
 
 // Catch-all route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../carpenterFrontEnd/build', 'index.js'));
+  res.sendFile(path.join(__dirname, '../carpenterFrontEnd/build', 'index.html'));
 });
 
 //Server
