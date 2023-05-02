@@ -7,8 +7,6 @@ if (process.env.NODE_ENV != 'production') {
 const express = require('express');
 const cors = require('cors');
 const dbconnection = require('./config/dbconnection');
-const path = require('path');
-const fs = require('fs');
 const studentsController = require('./controllers/studentsController');
 const incidentsController = require('./controllers/incidentsController');
 const accidentsController = require('./controllers/accidentsController');
@@ -23,7 +21,6 @@ dbconnection();
 //Configure express app
 app.use(express.json()); 
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'build')));
 
 //Routes
 
@@ -53,12 +50,7 @@ app.get('/referrals/:id', referralsController.getOneReferral );
 app.post("/referrals", referralsController.createReferral);
 app.put('/referrals/:id', referralsController.updateReferral);
 app.delete('/referrals/:id', referralsController.deleteReferral);
-console.log("__dirname:", __dirname);
-console.log("Contents of build directory:", fs.readdirSync(path.join(__dirname, "../carpenterFrontEnd/build")));
 // Catch-all route
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
 //Server
 app.listen(process.env.PORT , function (){
     console.log('Listening on port:'+process.env.PORT);
