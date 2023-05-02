@@ -7,6 +7,7 @@ if (process.env.NODE_ENV != 'production') {
 const express = require('express');
 const cors = require('cors');
 const dbconnection = require('./config/dbconnection');
+const path = require('path');
 const studentsController = require('./controllers/studentsController');
 const incidentsController = require('./controllers/incidentsController');
 const accidentsController = require('./controllers/accidentsController');
@@ -20,7 +21,8 @@ dbconnection();
 
 //Configure express app
 app.use(express.json()); 
-app.use(cors()); 
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 //Routes
 
@@ -30,13 +32,11 @@ app.get('/students/:id', studentsController.getOneStudent );
 app.post("/students", studentsController.createStudent);
 app.put('/students/:id', studentsController.updateStudent);
 
-
 //Incidents CRUD
 app.get('/incidents', incidentsController.getAllIncidents);
 app.get('/incidents/:id', incidentsController.getOneIncident );
 app.post("/incidents", incidentsController.createIncident);
 app.put('/incidents/:id', incidentsController.updateIncident);
-//ADD DELETE REQUEST ROUTE HERE AND CONTROLLER IN INCIDENTSCONTROLLER.JS
 app.delete('/incidents/:id', incidentsController.deleteIncident);
 
 //Accidents CRUD
@@ -44,7 +44,6 @@ app.get('/accidents', accidentsController.getAllAccidents);
 app.get('/accidents/:id', accidentsController.getOneAccident );
 app.post("/accidents", accidentsController.createAccident);
 app.put('/accidents/:id', accidentsController.updateAccident);
-//ADD DELETE REQUEST ROUTE HERE AND CONTROLLER IN ACCIDENTSCONTROLLER.JS
 app.delete('/accidents/:id', accidentsController.deleteAccident);
 
 //Referrals CRUD
@@ -52,8 +51,12 @@ app.get('/referrals', referralsController.getAllReferrals);
 app.get('/referrals/:id', referralsController.getOneReferral );
 app.post("/referrals", referralsController.createReferral);
 app.put('/referrals/:id', referralsController.updateReferral);
-//ADD DELETE REQUEST ROUTE HERE AND CONTROLLER IN ReferralsCONTROLLER.JS
 app.delete('/referrals/:id', referralsController.deleteReferral);
+
+// Catch-all route
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
 
 //Server
 app.listen(process.env.PORT , function (){
