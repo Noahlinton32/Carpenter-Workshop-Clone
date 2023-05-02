@@ -22,7 +22,7 @@ dbconnection();
 //Configure express app
 app.use(express.json()); 
 app.use(cors());
-app.use(express.static(path.join(__dirname, '../carpenterFrontEnd/src')));
+app.use(express.static(path.join(__dirname, '../carpenterFrontEnd/build')));
 
 //Routes
 
@@ -55,7 +55,7 @@ app.delete('/referrals/:id', referralsController.deleteReferral);
 
 // Catch-all route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../carpenterFrontEnd/src', 'index.js'));
+  res.sendFile(path.join(__dirname, '../carpenterFrontEnd/build', 'index.js'));
 });
 
 //Server
