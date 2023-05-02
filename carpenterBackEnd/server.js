@@ -8,7 +8,7 @@ if (process.env.NODE_ENV != 'production') {
 const express = require('express');
 const cors = require('cors');
 const dbconnection = require('./config/dbconnection');
-
+const frontendBuildPath = path.join(__dirname, '../carpenterFrontEnd/build');
 const studentsController = require('./controllers/studentsController');
 const incidentsController = require('./controllers/incidentsController');
 const accidentsController = require('./controllers/accidentsController');
@@ -22,8 +22,13 @@ dbconnection();
 
 //Configure express app
 app.use(express.json()); 
-app.use(cors());
-
+app.use(cors({
+  origin: ['https://carpenterservice.onrender.com', 'http://localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.use(express.static(frontendBuildPath));
 //Routes
 
 //Student CFU
@@ -53,7 +58,9 @@ app.post("/referrals", referralsController.createReferral);
 app.put('/referrals/:id', referralsController.updateReferral);
 app.delete('/referrals/:id', referralsController.deleteReferral);
 // Catch-all route
-app.use(express.static(path.join(__dirname, '../carpenterFrontEnd/build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(frontendBuildPath, 'index.html'));
+});
 //Server
 app.listen(process.env.PORT , function (){
     console.log('Listening on port:'+process.env.PORT);
