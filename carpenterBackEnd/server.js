@@ -1,4 +1,5 @@
 //loading env
+const path = require('path');
 if (process.env.NODE_ENV != 'production') {
     require("dotenv").config();
 }; 
@@ -7,6 +8,7 @@ if (process.env.NODE_ENV != 'production') {
 const express = require('express');
 const cors = require('cors');
 const dbconnection = require('./config/dbconnection');
+
 const studentsController = require('./controllers/studentsController');
 const incidentsController = require('./controllers/incidentsController');
 const accidentsController = require('./controllers/accidentsController');
@@ -51,6 +53,7 @@ app.post("/referrals", referralsController.createReferral);
 app.put('/referrals/:id', referralsController.updateReferral);
 app.delete('/referrals/:id', referralsController.deleteReferral);
 // Catch-all route
+app.use(express.static(path.join(__dirname, '../carpenterFrontEnd/build')));
 //Server
 app.listen(process.env.PORT , function (){
     console.log('Listening on port:'+process.env.PORT);
