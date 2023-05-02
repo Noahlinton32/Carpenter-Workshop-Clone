@@ -187,7 +187,7 @@ const EditIncident = () => {
   useEffect(() => {
     const getIncident = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/incidents/${id}`);
+        const res = await axios.get(`hhttps://carpenterservice.onrender.com/incidents/${id}`);
         const incidentData = res.data.incident;
         incidentData.date = formatDate(incidentData.date);
         setForm(incidentData);
@@ -221,7 +221,7 @@ const EditIncident = () => {
       setErrors(errors);
     } else {
       const formWithoutCircularReferences = removeCircularReferences(form);
-      await axios.put(`http://localhost:3000/incidents/${id}`, formWithoutCircularReferences);
+      await axios.put(`hhttps://carpenterservice.onrender.com/incidents/${id}`, formWithoutCircularReferences);
       navigate('/incidents');
     }
   };

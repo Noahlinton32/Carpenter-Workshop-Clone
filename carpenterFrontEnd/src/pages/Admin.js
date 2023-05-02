@@ -31,12 +31,12 @@ const [errorMessage, setErrorMessage] = useState(null);
   }, []);
 
   const fetchStaff = async () => {
-    const staffResponse = await axios.get('http://localhost:3000/admin/staff');
+    const staffResponse = await axios.get('hhttps://carpenterservice.onrender.com/admin/staff');
     setStaffList(staffResponse.data.staff);
   };
 
   const fetchStudents = async () => {
-    const studentResponse = await axios.get('http://localhost:3000/admin/students');
+    const studentResponse = await axios.get('hhttps://carpenterservice.onrender.com/admin/students');
     setStudentList(studentResponse.data.students);
   };
 
@@ -45,7 +45,7 @@ const [errorMessage, setErrorMessage] = useState(null);
     event.preventDefault();
     if (editStaffId) {
       try {
-        const response = await axios.put(`http://localhost:3000/admin/staff/${editStaffId}/password`, { password: editStaffPassword });
+        const response = await axios.put(`hhttps://carpenterservice.onrender.com/admin/staff/${editStaffId}/password`, { password: editStaffPassword });
         
         if (response.status === 200) {
           setEditStaffPassword('');
@@ -99,7 +99,7 @@ const [errorMessage, setErrorMessage] = useState(null);
   
     // Check if Employee ID already exists
     try {
-      const response = await axios.get(`http://localhost:3000/admin/staff/exists/${newStaffEmployeeID}`);
+      const response = await axios.get(`hhttps://carpenterservice.onrender.com/admin/staff/exists/${newStaffEmployeeID}`);
       if(response.status === 200 || response.status === 304){
         console.error('Error checking Employee ID existence:');
         setErrorMessage('Employee ID already exists.');
@@ -111,7 +111,7 @@ const [errorMessage, setErrorMessage] = useState(null);
     } catch (error) {
       if (error.response && error.response.status === 404) {
         try {
-          await axios.post('http://localhost:3000/admin/staff', {
+          await axios.post('hhttps://carpenterservice.onrender.com/admin/staff', {
             employeeID: newStaffEmployeeID,
             password: newStaffPassword,
             name: newStaffName,
@@ -145,7 +145,7 @@ const [errorMessage, setErrorMessage] = useState(null);
 }
   const handleNewStudentSubmit = async (event) => {
     event.preventDefault();
-    await axios.post('http://localhost:3000/admin/students', { name: newStudentName });
+    await axios.post('hhttps://carpenterservice.onrender.com/admin/students', { name: newStudentName });
     setNewStudentName('');
     fetchStudents();
   };
@@ -153,7 +153,7 @@ const [errorMessage, setErrorMessage] = useState(null);
   const handleEditStaffSubmit = async (event) => {
     try {
       event.preventDefault();
-      const response = await axios.put(`http://localhost:3000/admin/staff/${editStaffId}`, { name: editStaffName });
+      const response = await axios.put(`hhttps://carpenterservice.onrender.com/admin/staff/${editStaffId}`, { name: editStaffName });
       
       if (response.status === 200) {
         setEditStaffId(null);
@@ -174,7 +174,7 @@ const [errorMessage, setErrorMessage] = useState(null);
   const handleEditStudentSubmit = async (event) => {
     try{
     event.preventDefault();
-    await axios.put(`http://localhost:3000/admin/students/${editStudentId}`, { name: editStudentName });
+    await axios.put(`hhttps://carpenterservice.onrender.com/admin/students/${editStudentId}`, { name: editStudentName });
     setEditStudentId('');
     setEditStudentName('');
     fetchStudents();
@@ -184,20 +184,20 @@ const [errorMessage, setErrorMessage] = useState(null);
   };
   const handleUnarchiveStaff = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/admin/staff/${id}`);
+      await axios.delete(`hhttps://carpenterservice.onrender.com/admin/staff/${id}`);
       fetchStaff(); // Refresh staff list
     } catch (error) {
       console.error('Error unarchiving staff:', error);
     }
   };
   const handleArchiveStaff = async (staffId) => {
-    await axios.delete(`http://localhost:3000/admin/staff/${staffId}`);
+    await axios.delete(`hhttps://carpenterservice.onrender.com/admin/staff/${staffId}`);
     fetchStaff();
   };
 
   const handleUnarchiveStudent = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/admin/students/${id}`);
+      await axios.delete(`hhttps://carpenterservice.onrender.com/admin/students/${id}`);
       fetchStudents(); // Refresh student list
     } catch (error) {
       console.error('Error unarchiving student:', error);
@@ -205,7 +205,7 @@ const [errorMessage, setErrorMessage] = useState(null);
   };
 
   const handleArchiveStudent = async (studentId) => {
-    await axios.delete(`http://localhost:3000/admin/students/${studentId}`);
+    await axios.delete(`hhttps://carpenterservice.onrender.com/admin/students/${studentId}`);
     fetchStudents();
   };
 
