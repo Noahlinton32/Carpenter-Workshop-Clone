@@ -4,14 +4,12 @@ import {NavLink} from "../components/Navbar/NavbarElements";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from "react-bootstrap";
 import styled, {createGlobalStyle, css} from 'styled-components';
-import { MDBDataTable } from 'mdbreact';
+import Collapsible from 'react-collapsible';
 
 const GlobalStyle = createGlobalStyle`
   html{
     height: 100%;
-
   }
-
   body{
     font-family: Arial, Helvetica, sans-serif;
     background: linear-gradient(to top, #d1913c, #ffd194);
@@ -30,85 +28,18 @@ function Students() {
   
   //User Effect
   useEffect (() => {
-    fetchStudents();
+    getStudents();
   }, []);
 
   //Functions 
-  const fetchStudents = async () => {
+  const getStudents = async () => {
     const res = await axios.get('http://localhost:3000/students');
     setStudents(res.data.students);
   };
-<<<<<<< HEAD
-  const handleArchiveStudent = async (studentId) => {
-    await axios.delete(`http://localhost:3000/admin/students/${studentId}`);
-    fetchStudents();
-  };
-=======
-  for (let i in students){
-    students[i]['edit']=(<NavLink to={`/students/edit/${students[i]['_id']}`}><Button style={{backgroundColor: 'lightblue', border: '0'}}>Edit</Button></NavLink>)
-    students[i]['guardian']= students[i]['firstNameFirstGuardian']+' '+students[i]['lastNameFirstGuardian']
-    students[i]['guardian2']= students[i]['firstNameSecondGuardian']+' '+students[i]['lastNameSecondGuardian']
-
-  }
-  const data = {
-    columns: [
-      {
-        label: 'Name',
-        field: 'name',
-        sort: 'asc',
-        width: 100
-      },
-      {
-        label: 'Student ID',
-        field: 'studentID',
-        sort: 'asc',
-        width: 200
-      },
-      {
-        label: 'GPA',
-        field: 'gpa',
-        sort: 'asc',
-        width: 100
-      },
-      {
-        label: 'Grade',
-        field: 'grade',
-        sort: 'asc',
-        width: 200
-      },
-      {
-        label: 'Emergency Number',
-        field: 'emergencyNumber',
-        sort: 'asc',
-        width: 100
-      },
-      {
-        label: 'Guardian',
-        field: 'guardian',
-        sort: 'asc',
-        width: 150
-      },
-      {
-        label: 'Secondary Guardian',
-        field: 'guardian2',
-        sort: 'asc',
-        width: 100
-      },
-      {
-        label: 'Edit',
-        field: 'edit',
-      }
-    ],
-    rows: 
-      students
-    }
-    console.log(data)
   
->>>>>>> d72bfab541a295c42ed18822a470d81362abc60b
   
-  return <div style={{margin: 'auto'}}>
+  return <div style={{marginLeft: '45%'}}>
     <GlobalStyle/>
-<<<<<<< HEAD
     <h2>Students</h2>
     <div style={{display: 'grid', marginLeft: '-45%'}}>
     {students && students.map (student => {
@@ -149,12 +80,7 @@ function Students() {
     <NavLink to={`/students/edit/${student._id}`}>
     <Button style={{backgroundColor: '#D1913C', color:'#000', border: '0'}}>Edit Student</Button>
     </NavLink>
-    </div> 
-    <div>
-    <Button
-      style={{ backgroundColor: '#c75252', color: '#000', border: '0' }}
-      onClick={() => handleArchiveStudent(student._id)}
-    > Archive Student </Button>
+
     </div> 
       </div>
   </Collapsible>
@@ -167,25 +93,10 @@ function Students() {
 
 
 <div style={{marginLeft:'-2%', marginTop: '2%'}}>
-=======
-    <h2 style={{marginLeft: '50%'}}>Students</h2>
-    <div style={{width: '80%', marginLeft:'10%', backgroundColor: '#fff',
-                borderRadius: '10px', padding: '0 20px',boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.2)', minWidth: '650px'}}>
-    <MDBDataTable
-      striped
-      small
-      data={data}
-      noBottomColumns={true} 
-    />
-    <div style={{ paddingBottom:'20px'}}>
->>>>>>> d72bfab541a295c42ed18822a470d81362abc60b
 <NavLink to="/students/create" activeStyle>
     <Button>Create Student</Button>
 </NavLink>
 </div>
-    </div>
-
-
 </div>     
 }
 export default Students;
