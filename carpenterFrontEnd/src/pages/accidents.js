@@ -4,7 +4,6 @@ import {NavLink} from "../components/Navbar/NavbarElements";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from "react-bootstrap";
 import styled, {createGlobalStyle, css} from 'styled-components';
-import { MDBDataTable } from 'mdbreact';
 
 const GlobalStyle = createGlobalStyle`
   html{
@@ -140,12 +139,7 @@ const data = {
     <h2 style={{marginLeft: '50%'}}>Accidents</h2>
     <div style={{width: '80%', marginLeft:'10%', backgroundColor: '#fff',
                 borderRadius: '10px', padding: '0 20px',boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.2)', minWidth: '650px'}}>
-    <MDBDataTable
-      striped
-      small
-      data={data}
-      noBottomColumns={true} 
-    />
+
     <div style={{ paddingBottom:'20px'}}>
 <NavLink to="/accidents/create" activeStyle>
     <Button>Create Accident</Button>
