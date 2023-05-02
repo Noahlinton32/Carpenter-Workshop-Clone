@@ -8,6 +8,7 @@ const express = require('express');
 const cors = require('cors');
 const dbconnection = require('./config/dbconnection');
 const path = require('path');
+const fs = require('fs');
 const studentsController = require('./controllers/studentsController');
 const incidentsController = require('./controllers/incidentsController');
 const accidentsController = require('./controllers/accidentsController');
