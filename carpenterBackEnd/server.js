@@ -52,7 +52,7 @@ app.get('/referrals/:id', referralsController.getOneReferral );
 app.post("/referrals", referralsController.createReferral);
 app.put('/referrals/:id', referralsController.updateReferral);
 app.delete('/referrals/:id', referralsController.deleteReferral);
-
+console.log("Current directory: " + path.join(__dirname, '../carpenterFrontEnd/build'));
 // Catch-all route
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../carpenterFrontEnd/build', 'index.html'));
