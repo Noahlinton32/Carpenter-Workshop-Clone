@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ limit: '500mb', extended: true, parameterLimit: 
 app.use(express.json()); 
 app.use(morgan('dev'));
 app.use(cors({
-    origin: 'http://localhost:3001', // Replace this with your frontend domain
+    origin: process.env.REACT_APP_API_BASE_URL, // Replace this with your frontend domain
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Add the allowed methods
     allowedHeaders: ['Content-Type', 'Authorization']
   }));
