@@ -7,7 +7,7 @@ if (process.env.NODE_ENV != 'production') {
 const express = require('express');
 const cors = require('cors');
 const dbconnection = require('./config/dbconnection');
-//const path = require('path');
+const path = require('path');
 const studentsController = require('./controllers/studentsController');
 const incidentsController = require('./controllers/incidentsController');
 const accidentsController = require('./controllers/accidentsController');
@@ -22,7 +22,7 @@ dbconnection();
 //Configure express app
 app.use(express.json()); 
 app.use(cors());
-//app.use(express.static(path.join(__dirname, '../carpenterFrontEnd/build')));
+app.use(express.static(path.join(__dirname, '../carpenterFrontEnd/build')));
 
 //Routes
 
@@ -54,9 +54,9 @@ app.put('/referrals/:id', referralsController.updateReferral);
 app.delete('/referrals/:id', referralsController.deleteReferral);
 
 // Catch-all route
-//app.get('*', (req, res) => {
-//  res.sendFile(path.join(__dirname, '../carpenterFrontEnd/build', 'index.html'));
-//});
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../carpenterFrontEnd/build', 'App.js'));
+});
 
 //Server
 app.listen(process.env.PORT , function (){
