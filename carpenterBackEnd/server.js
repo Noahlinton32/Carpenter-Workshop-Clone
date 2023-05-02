@@ -52,7 +52,12 @@ app.get('/referrals/:id', referralsController.getOneReferral );
 app.post("/referrals", referralsController.createReferral);
 app.put('/referrals/:id', referralsController.updateReferral);
 app.delete('/referrals/:id', referralsController.deleteReferral);
-console.log("Current directory: " + path.join(__dirname, '../carpenterFrontEnd/build'));
+console.log("5 levels above")
+console.log(__dirname);
+console.log(path.join(__dirname, '..'));
+console.log(path.join(__dirname, '../..'));
+console.log(path.join(__dirname, '../../..'));
+console.log(path.join(__dirname, '../../../..'));
 // Catch-all route
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../carpenterFrontEnd/build', 'index.html'));
