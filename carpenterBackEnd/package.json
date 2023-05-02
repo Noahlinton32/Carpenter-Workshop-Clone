@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "start": "concurrently \"npm run dev\" \"cd ../carpenterFrontEnd && pwd && npm install && npm run build\"",
-    "dev": "nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "scripts": {
+      "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+      "backend": "node server.js",
+      "frontend": "node frontend-server.js"
+    },  
   "keywords": [],
   "author": "",
   "license": "ISC",
