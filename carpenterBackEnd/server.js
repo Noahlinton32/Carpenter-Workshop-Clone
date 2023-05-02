@@ -22,7 +22,12 @@ dbconnection();
 
 //Configure express app
 app.use(express.json()); 
-app.use(cors());
+app.use(cors({
+  origin: ['https://carpenterservice.onrender.com', 'http://localhost:3000'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.static(frontendBuildPath));
 //Routes
 
