@@ -22,7 +22,7 @@ dbconnection();
 //Configure express app
 app.use(express.json()); 
 app.use(cors());
-app.use(express.static(path.join(__dirname, '../../carpenterFrontEnd/build')));
+app.use(express.static(path.join(__dirname, 'carpenterFrontEnd/build')));
 
 //Routes
 
@@ -60,7 +60,7 @@ console.log(path.join(__dirname, '../../..'));
 console.log(path.join(__dirname, '../../../..'));
 // Catch-all route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../carpenterFrontEnd/build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'carpenterFrontEnd/build', 'index.html'));
 });
 //Server
 app.listen(process.env.PORT , function (){
