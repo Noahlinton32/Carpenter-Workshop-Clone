@@ -55,9 +55,8 @@ app.delete('/referrals/:id', referralsController.deleteReferral);
 
 // Catch-all route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../carpenterFrontEnd/build', 'App.js'));
+  res.sendFile(path.join(__dirname, '../carpenterFrontEnd/build', 'index.html'));
 });
-
 //Server
 app.listen(process.env.PORT , function (){
     console.log('Listening on port:'+process.env.PORT);
