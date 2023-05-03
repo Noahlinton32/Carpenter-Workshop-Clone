@@ -162,7 +162,7 @@ const EditAccident = () => {
       useEffect(() => {
         const getAccident = async () => {
           try {
-            const res = await axios.get(`hhttps://carpenterservice.onrender.com/accidents/${id}`);
+            const res = await axios.get(`https://carpenterservice.onrender.com/accidents/${id}`);
             const accidentData = res.data.accident;
             accidentData.date = formatDate(accidentData.date);
             setForm(accidentData);
@@ -196,7 +196,7 @@ const EditAccident = () => {
           console.error("Form validation errors:", errors);
         } else {
           const formWithoutCircularReferences = removeCircularReferences(form);
-          await axios.put(`hhttps://carpenterservice.onrender.com/accidents/${id}`, formWithoutCircularReferences);
+          await axios.put(`https://carpenterservice.onrender.com/accidents/${id}`, formWithoutCircularReferences);
           navigate('/accidents');
         }
       };

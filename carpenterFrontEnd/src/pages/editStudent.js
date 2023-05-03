@@ -160,7 +160,7 @@ const EditStudent = () => {
  useEffect(() => {
     const getStudent = async () => {
       try {
-        const res = await axios.get(`hhttps://carpenterservice.onrender.com/students/${id}`);
+        const res = await axios.get(`https://carpenterservice.onrender.com/students/${id}`);
         const studentData = res.data.student;
         studentData.enrollmentDate = formatDate(studentData.enrollmentDate);
         studentData.graduationDate = formatDate(studentData.graduationDate);
@@ -196,7 +196,7 @@ const EditStudent = () => {
       setErrors(errors);
     } else {
       const formWithoutCircularReferences = removeCircularReferences(form);
-      await axios.put(`hhttps://carpenterservice.onrender.com/students/${id}`, formWithoutCircularReferences);
+      await axios.put(`https://carpenterservice.onrender.com/students/${id}`, formWithoutCircularReferences);
       navigate('/students');
     }
   };
