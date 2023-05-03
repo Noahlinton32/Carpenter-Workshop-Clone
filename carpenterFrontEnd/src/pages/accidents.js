@@ -4,13 +4,12 @@ import {NavLink} from "../components/Navbar/NavbarElements";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from "react-bootstrap";
 import styled, {createGlobalStyle, css} from 'styled-components';
+import Collapsible from 'react-collapsible';
 
 const GlobalStyle = createGlobalStyle`
   html{
     height: 100%;
-
   }
-
   body{
     font-family: Arial, Helvetica, sans-serif;
     background: linear-gradient(to top, #d1913c, #ffd194);
@@ -19,7 +18,6 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     color: 555;
   }
-
 `
 
 
@@ -31,121 +29,87 @@ function Accidents() {
   }, []);
 
   const getAccidents = async () => {
-    const res = await axios.get('https://carpenterservice.onrender.com/accidents');
+    const res = await axios.get('http://localhost:3000/accidents');
     setAccidents(res.data.accidents);
   };
 
 const handleDeleteAccident = async (id) => {
   try {
-    await axios.delete(`https://carpenterservice.onrender.com/accidents/${id}`);
+    await axios.delete(`http://localhost:3000/accidents/${id}`);
     setAccidents(accidents.filter((accident) => accident._id !== id));
   } catch (error) {
     console.error('Error deleting accident:', error.response);
   }
 };
-for (let i in accidents){
-  accidents[i]['edit']=(<NavLink to={`/accidents/edit/${accidents[i]['_id']}`}><Button style={{backgroundColor: 'lightblue', border: '0'}}>Edit</Button></NavLink>)
-  accidents[i]['delete']= <Button
-  style={{backgroundColor: 'darkred', border: '0'}}
-  onClick={() => handleDeleteAccident(accidents[i]['_id'])}
-> Delete </Button>
-  accidents[i]['date']= accidents[i]['date'].split('T')[0]
-  
-
-}
-const data = {
-  columns: [
-    {
-      label: 'Accident Report No.',
-      field: 'accidentReportNumber',
-      sort: 'asc',
-      width: 100
-    },
-    {
-      label: 'Student ID',
-      field: 'studentID',
-      sort: 'asc',
-      width: 200
-    },
-    {
-      label: 'School',
-      field: 'school',
-      sort: 'asc',
-      width: 100
-    },
-    {
-      label: 'Employee',
-      field: 'employeeID',
-      sort: 'asc',
-      width: 200
-    },
-    {
-      label: 'Room',
-      field: 'room',
-      sort: 'asc',
-      width: 100
-    },
-    {
-      label: 'Date',
-      field: 'date',
-      sort: 'asc',
-      width: 150
-    },
-    {
-      label: 'Location',
-      field: 'location',
-      sort: 'asc',
-      width: 100
-    },
-    {
-      label: 'Cause',
-      field: 'cause',
-      sort: 'asc',
-      width: 100
-    },
-    {
-      label: 'Response',
-      field: 'response',
-      sort: 'asc',
-      width: 100
-    },
-    {
-      label: 'Action',
-      field: 'preventativeAction',
-      sort: 'asc',
-      width: 100
-    },
-    {
-      label: 'Witnesses',
-      field: 'witnesses',
-      sort: 'asc',
-      width: 100
-    },
-    {
-      label: 'Edit',
-      field: 'edit',
-    },
-    {
-      label: 'Delete',
-      field: 'delete',
-    }
-  ],
-  rows: 
-    accidents
-  }
-  console.log(data)
-  return <div style={{marginLeft: 'auto'}}>
+  return <div style={{marginLeft: '45%'}}>
     <GlobalStyle/>
-    <h2 style={{marginLeft: '50%'}}>Accidents</h2>
-    <div style={{width: '80%', marginLeft:'10%', backgroundColor: '#fff',
-                borderRadius: '10px', padding: '0 20px',boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.2)', minWidth: '650px'}}>
+    <h2>Accidents</h2>
+    <div style={{display: 'grid', marginLeft: '-45%'}}>
+    {accidents && accidents.map (accident => {
+        return <div key={accident._id}> 
+<td>
+<div style={{backgroundColor: '#fff',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: '2%',
+                height: '100%',
+                width: '100%',
+                maxWidth: '1000px',
+                padding: '0 20px',
+                borderRadius: '10px',
+                boxShadow: '0px 0px 20px 0px rgba(0,0,0,0.2)'
+                }}>
+    <Collapsible trigger={<h5>Accident Number: {accident.accidentReportNumber}</h5>} style={{backgroundColor: '#fff'}}>
+      <div style={{
+        display: 'grid',
+        width:'100%',
+        gridTemplateRows: '40px 40px 40px 40px 40px 40px 40px 40px 40px 40px',
+        gridTemplateColumns: '400px 400px',
 
-    <div style={{ paddingBottom:'20px'}}>
+
+      }}>
+
+    <p>Student ID: {accident.studentID}</p>
+    <p>School: {accident.school}</p>
+    <p>Employee ID: {accident.employeeID}</p>
+    <p>Room: {accident.room}</p>
+    <p>Date: {accident.date}</p>
+    <p>Location: {accident.location}</p>
+    <p>ID of Staff Involved: {accident.employeeIDInvolved}</p>
+    <p>ID of Student Involved: {accident.studentIDInvolved}</p>
+    <p>Cause: {accident.cause}</p>
+    <p>Response: {accident.response}</p>
+    <p>Preventative Action Taken: {accident.preventativeAction}</p>
+    <p>Witnesses: {accident.witnesses}</p>
+    <p>Signed? {accident.signed}</p>
+
+    <div></div>
+    <div>
+    <NavLink to={`/accidents/edit/${accident._id}`}>
+    <Button style={{backgroundColor: '#D1913C', color:'#000', border: '0'}}>Edit Accident</Button>
+    </NavLink>
+    </div>
+    <div>
+    <Button
+      style={{ backgroundColor: '#c75252', color: '#000', border: '0' }}
+      onClick={() => handleDeleteAccident(accident._id)}
+    > Delete Accident </Button>
+    </div> 
+      </div>
+  </Collapsible>
+  </div>
+  </td>
+</div>
+    })}
+</div> 
+
+
+<div style={{marginLeft:'-2%', marginTop: '2%'}}>
 <NavLink to="/accidents/create" activeStyle>
     <Button>Create Accident</Button>
 </NavLink>
 </div>
-</div>     
 </div>     
 }
 export default Accidents;

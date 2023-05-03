@@ -9,9 +9,7 @@ import Collapsible from 'react-collapsible';
 const GlobalStyle = createGlobalStyle`
   html{
     height: 100%;
-
   }
-
   body{
     font-family: Arial, Helvetica, sans-serif;
     background: linear-gradient(to top, #d1913c, #ffd194);
@@ -23,29 +21,32 @@ const GlobalStyle = createGlobalStyle`
 `
 
 function Incidents() {
-  // State
+
   const [incidents, setIncidents] = useState(null);
-  
-  //User Effect
+
   useEffect (() => {
     getIncidents();
   }, []);
 
-  //Functions 
   const getIncidents = async () => {
-    //get incidents
-    const res = await axios.get('https://carpenterservice.onrender.com/incidents');
-    //set state
+    const res = await axios.get('http://localhost:3000/incidents');
     setIncidents(res.data.incidents);
   };
-  
+  const deleteIncident = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3000/incidents/${id}`);
+      setIncidents(incidents.filter((incident) => incident._id !== id));
+    } catch (error) {
+      console.error("Error deleting incident:", error);
+    }
+  };
   
   return <div style={{marginLeft: '45%'}}>
     <GlobalStyle/>
     <h2>Incidents</h2>
     <div style={{display: 'grid', marginLeft: '-45%'}}>
     {incidents && incidents.map (incident => {
-        return <div key={incident.id}> 
+        return <div key={incident._id}> 
 <td>
 <div style={{backgroundColor: '#fff',
                 display: 'flex',
@@ -88,12 +89,17 @@ function Incidents() {
     <p>Signed? {incident.signed}</p>
     <div></div>
     <div>
-    <NavLink to="/incidents/edit">
+    <NavLink to={`/incidents/edit/${incident._id}`}>Edit
     <Button style={{backgroundColor: '#D1913C', color:'#000', border: '0'}}>Edit Incident</Button>
     </NavLink>
     </div>
     <div>
-    <Button style={{backgroundColor: '#c75252', color:'#000', border: '0'}}>Delete Incident</Button>
+    <Button
+  onClick={() => deleteIncident(incident._id)}
+  style={{ backgroundColor: "#c75252", color: "#000", border: "0" }}
+>
+  Delete Incident
+</Button>
     </div> 
       </div>
   </Collapsible>
