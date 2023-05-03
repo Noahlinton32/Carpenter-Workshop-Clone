@@ -29,12 +29,12 @@ function Incidents() {
   }, []);
 
   const getIncidents = async () => {
-    const res = await axios.get('httphttps://carpenterservice.onrender.com/incidents');
+    const res = await axios.get('https://carpenterservice.onrender.com/incidents');
     setIncidents(res.data.incidents);
   };
   const deleteIncident = async (id) => {
     try {
-      await axios.delete(`httphttps://carpenterservice.onrender.com/incidents/${id}`);
+      await axios.delete(`https://carpenterservice.onrender.com/incidents/${id}`);
       setIncidents(incidents.filter((incident) => incident._id !== id));
     } catch (error) {
       console.error("Error deleting incident:", error);

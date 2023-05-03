@@ -28,12 +28,12 @@ function Referrals() {
   }, []);
 
   const getReferrals = async () => {
-    const res = await axios.get('httphttps://carpenterservice.onrender.com/referrals');
+    const res = await axios.get('https://carpenterservice.onrender.com/referrals');
     setReferrals(res.data.referrals);
   };
   const deleteReferral = async (id) => {
     try {
-      await axios.delete(`httphttps://carpenterservice.onrender.com/referrals/${id}`);
+      await axios.delete(`https://carpenterservice.onrender.com/referrals/${id}`);
       setReferrals(referrals.filter((referral) => referral._id !== id));
     } catch (error) {
       console.error("Error deleting referral:", error);
