@@ -1,8 +1,54 @@
 // Admin.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../mySite.css'
+import styled from 'styled-components';
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  margin-bottom: 20px;
+`;
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Label = styled.label`
+  margin-bottom: 5px;
+`;
+
+const Input = styled.input`
+  margin-bottom: 15px;
+`;
+
+const Button = styled.button`
+  cursor: pointer;
+  background-color: #007bff;
+  border: 1px solid #007bff;
+  color: #fff;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 5px;
+  &:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+`;
 const Admin = () => {
   // Staff state variables
 const [editStaffPassword, setEditStaffPassword] = useState('');
