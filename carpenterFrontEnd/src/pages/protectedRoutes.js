@@ -12,7 +12,6 @@ import Accidents from './accidents';
 import CreateAccidents from './CreateAccident';
 import Referrals from './referrals';
 import CreateReferrals from './CreateReferral';
-import Profile from './profile';
 import AdminProfile from './Admin';
 import EditAccident from './editAccident';
 import EditIncident from './editIncident';
@@ -102,12 +101,6 @@ function ProtectedRoutes() {
         element={
           <RequireAuth>
         <EditReferral/>
-        </RequireAuth>
-        } />
-        <Route path="/profile" 
-        element={
-          <RequireAuth>
-        <Profile/>
         </RequireAuth>
         } />
         <Route path="/admin"
