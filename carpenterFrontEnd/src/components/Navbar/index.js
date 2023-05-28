@@ -26,8 +26,6 @@ const Navbar = () => {
             <NavLink to="/incidents" activeStyle>Incidents</NavLink>
 
             <NavLink to="/referrals" activeStyle>Referrals</NavLink>
-
-            <NavLink to="/profile" activeStyle>Profile</NavLink>
         </NavMenu>
         <NavBtn>
         <NavBtnLink to="/" onClick={handleLogout}>Log Out</NavBtnLink>
