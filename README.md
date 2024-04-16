@@ -5,12 +5,15 @@ The Carpenter Workshop application is a project built for the non-profit organiz
 The main functionality of this application is to allow users to generate reports using various pages, which are then stored into MongoDB. These reports can be accessed by administrators for generating relevant metrics and review.
 Web URL
 
-**https://carpenterservice.onrender.com/
-[This is a development branch and may not reflect the live branch in use currently]
-Login Information
-Username: user
-Password: pass**
+**https://carpenterservice.onrender.com/**
 
+**[This is a development branch and may not reflect the live branch in use currently]**
+
+**Login Information**
+
+**Username: user**
+
+**Password: pass**
 
 Prerequisites
 
